@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { auth } from "../../Firebase/setup";
 import { RecaptchaVerifier } from "firebase/auth";
 import { signInWithPhoneNumber } from "firebase/auth";
-import bcrypt from "bcryptjs";
+
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Incentives from "./Incentives";
@@ -58,9 +58,8 @@ const Signup = () => {
   const submithandler = async (e) => {
     e.preventDefault();
     try {
-      const salt = bcrypt.genSaltSync(10);
-      const hash = bcrypt.hashSync(input.password, salt);
-      const addUser = { ...input, password: hash };
+    
+      const addUser = { ...input };
       const response = await fetch("http://localhost:4000/api/signup", {
         method: "POST",
         body: JSON.stringify(addUser),
