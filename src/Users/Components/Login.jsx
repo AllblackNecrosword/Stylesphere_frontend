@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Incentives from "./Incentives";
 
 const Login = () => {
+  
   const [input, setInput] = useState({});
   const navigate = useNavigate();
   const handleinput = (e) => {
@@ -22,11 +23,16 @@ const Login = () => {
         body: JSON.stringify(input),
       });
       const data = await response.json();
+      console.log(data); // Log the data received from the server
       if (response.ok) {
         // Login successful
         console.log(data.message);
-        navigate("/");
-        // Perform any necessary actions upon successful login (e.g., redirect)
+        // Redirect based on isAdmin value
+        if (data.isAdmin) {
+          navigate("/dashboard");
+        } else {
+          navigate("/");
+        }
       } else {
         // Login failed
         alert("data.error");
@@ -40,7 +46,7 @@ const Login = () => {
 
   return (
     <div>
-      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 ">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <h1 className="mt-10 text-center text-5xl font-black">Login</h1>
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-500 ">

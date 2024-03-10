@@ -114,7 +114,7 @@ const Navbar = () => {
                   KIDS
                 </Link>
                 <Link
-                  to={"kids"}
+                  to={"/contact"}
                   href="#"
                   className="px-3 py-2 rounded-md text-base font-extrabold border-b-2 border-transparent"
                 >
