@@ -88,7 +88,7 @@ const Dashboard = () => {
         </div>
       </div>
       {/* Content */}
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto bg-slate-200">
         {/* Display content based on the active menu */}
         {activeMenu === "dashboard" && <Home />}
         {activeMenu === "products" && <ProductContent />}
