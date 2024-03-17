@@ -1,31 +1,34 @@
 import React, { useEffect, useState } from "react";
 import ReactStars from "react-stars";
+
 const Shopmen = () => {
+  const [data, setData] = useState([]);
 
-  const [data,setData]=useState([]);
-
-  const getmenData= async()=>{
-    const response = await fetch ("http://localhost:4000/getmenData");
-    const result=await response.json();
-    if (!response.ok) {
-      console.log(result.error);
+  const getmenData = async () => {
+    try {
+      const response = await fetch("http://localhost:4000/getmenData");
+      const result = await response.json();
+      if (!response.ok) {
+        console.log(result.error);
+      }
+      if (response.ok) {
+        setData(result);
+      }
+    } catch (error) {
+      console.error(error);
     }
-    if (response.ok) {
-      setData(result);
-    }
+  };
 
-  }
-
-  useEffect(()=>{
+  useEffect(() => {
     getmenData();
-  },[]);
+  }, []);
 
   return (
     <div className="mt-28 pl-16 pr-16">
       <div className="items-center flex justify-center m-5">
-      <a href="">Clothing /</a>
-          <a href="">  Shoes /</a>
-          <a href=""> Accessories</a>
+        <a href="">Clothing /</a>
+        <a href=""> Shoes /</a>
+        <a href=""> Accessories</a>
       </div>
       <div className="flex justify-between items-center">
         <div className="flex gap-3 items-center">
@@ -80,8 +83,7 @@ const Shopmen = () => {
         </div>
       </div>
       <div className="pt-8">
-      {
-       <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 ">
+        <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 ">
           {data.map((product) => (
             <div key={product.id} className="group relative">
               <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
@@ -108,7 +110,6 @@ const Shopmen = () => {
                     edit={false}
                   />
                 </div>
-                {/* <p className="text-sm font-medium text-gray-900">{product.price}</p> */}
                 <div>
                   <p className="text-sm font-medium text-gray-900">
                     <span className="text-red-500 line-through px-4">
@@ -121,9 +122,7 @@ const Shopmen = () => {
             </div>
           ))}
         </div>
-      }
       </div>
-      
     </div>
   );
 };

@@ -1,12 +1,34 @@
-import React from 'react'
-import Cart from '../Components/Cart'
+import React, { useState, useEffect } from "react";
+import ReactStars from "react-stars";
+
 const Shopwomen = () => {
+  const [data, setData] = useState([]);
+
+  const getwomenData = async () => {
+    try {
+      const response = await fetch("http://localhost:4000/getwomenData");
+      const result = await response.json();
+      if (!response.ok) {
+        console.log(result.error);
+      }
+      if (response.ok) {
+        setData(result);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getwomenData();
+  }, []); // Empty dependency array ensures this effect runs only once on component mount
+
   return (
     <div className="mt-28 pl-16 pr-16">
-       <div className="items-center flex justify-center m-5">
-      <a href="">Clothing /</a>
-          <a href="">  Shoes /</a>
-          <a href=""> Accessories</a>
+      <div className="items-center flex justify-center m-5">
+        <a href="">Clothing /</a>
+        <a href=""> Shoes /</a>
+        <a href=""> Accessories</a>
       </div>
       <div className="flex justify-between items-center">
         <div className="flex gap-3 items-center">
@@ -61,11 +83,47 @@ const Shopwomen = () => {
         </div>
       </div>
       <div className="pt-8">
-       <Cart/> 
+        <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 ">
+          {data.map((product) => (
+            <div key={product.id} className="group relative">
+              <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
+                <img
+                  src={product.image.url}
+                  alt={product.imageAlt}
+                  className="h-full w-full object-cover object-center lg:h-full lg:w-full"
+                />
+              </div>
+              <div className="mt-4 flex justify-between">
+                <div>
+                  <h3 className="text-sm text-black ">
+                    <a href={product.href}>
+                      <span aria-hidden="true" className="absolute inset-0" />
+                      {product.name}
+                    </a>
+                  </h3>
+                  <ReactStars
+                    count={5}
+                    size={18}
+                    color2={"#ffd700"}
+                    value={4}
+                    edit={false}
+                  />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-900">
+                    <span className="text-red-500 line-through px-4">
+                      {/* ${product.price} */}
+                    </span>
+                    ${product.price}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
-      
     </div>
-  )
-}
+  );
+};
 
-export default Shopwomen
+export default Shopwomen;
