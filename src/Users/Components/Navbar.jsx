@@ -126,9 +126,8 @@ const Navbar = () => {
             {/* Search Input and Icons */}
             <div className="flex items-center">
               {/* Search Input */}
-
               <Link
-                to={"/"}
+                // to={"/"}
                 onClick={toggleSearch}
                 className="text-back hover:text-stone-500 focus:outline-none px-4 py-2"
               >

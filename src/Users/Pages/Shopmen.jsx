@@ -3,7 +3,7 @@ import ReactStars from "react-stars";
 
 const Shopmen = () => {
   const [data, setData] = useState([]);
-
+const [num,setNum]=useState(0);
   const getmenData = async () => {
     try {
       const response = await fetch("http://localhost:4000/getmenData");
@@ -19,9 +19,27 @@ const Shopmen = () => {
     }
   };
 
+  const getMennumber = async()=>{
+    try {
+      const response = await fetch("http://localhost:4000/getmennumber");
+      const result=await response.json();
+      if (!response.ok) {
+        console.log(result.error);
+      }
+      if (response.ok) {
+        setNum(result);
+      }
+      
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
     getmenData();
+    getMennumber();
   }, []);
+  console.log("Datas", data);
 
   return (
     <div className="mt-28 pl-16 pr-16">
@@ -33,7 +51,7 @@ const Shopmen = () => {
       <div className="flex justify-between items-center">
         <div className="flex gap-3 items-center">
           <h1 className="font-bold text-xl">Mens Wear</h1>
-          <p className="text-sm text-gray-500 ml-2">1280 products</p>
+          <p className="text-sm text-gray-500 ml-2">{num} products</p>
         </div>
         <div className="flex items-center">
           <label htmlFor="sorting" className="mr-2 rounded-2xl">
@@ -84,18 +102,23 @@ const Shopmen = () => {
       </div>
       <div className="pt-8">
         <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 ">
-          {data.map((product) => (
-            <div key={product.id} className="group relative">
+          {data.map((product, index) => (
+            <div className="group relative" key={index}>
               <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
+                {/* <img
+                  src={product.image}
+                  alt={product.name}
+                  className="h-full w-full object-cover object-center lg:h-full lg:w-full"
+                /> */}
                 <img
-                  src={product.image.url}
-                  alt={product.imageAlt}
+                  src={`http://localhost:4000/images/${product.image}`} // Correctly construct the image URL
+                  alt={product.name}
                   className="h-full w-full object-cover object-center lg:h-full lg:w-full"
                 />
               </div>
               <div className="mt-4 flex justify-between">
                 <div>
-                  <h3 className="text-sm text-black ">
+                  <h3 className="text-sm font-medium text-black ">
                     <a href={product.href}>
                       <span aria-hidden="true" className="absolute inset-0" />
                       {product.name}
@@ -111,7 +134,7 @@ const Shopmen = () => {
                   />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-gray-900">
+                  <p className="text-base font-bold text-gray-900">
                     <span className="text-red-500 line-through px-4">
                       {/* ${product.price} */}
                     </span>
@@ -119,6 +142,7 @@ const Shopmen = () => {
                   </p>
                 </div>
               </div>
+              
             </div>
           ))}
         </div>

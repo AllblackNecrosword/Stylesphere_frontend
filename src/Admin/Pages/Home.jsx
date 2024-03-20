@@ -161,11 +161,16 @@ const Home = () => {
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-white divide-y divide-gray-200 font-bold">
             {data.map((item, index) => (
               <tr key={index}>
                 <td className="px-6 py-4 whitespace-nowrap">{index + 1}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{item.name}</td>
+                {/* <td className="px-6 py-4 whitespace-nowrap">{item.name}</td> */}
+                <td className="px-6 py-4 whitespace-nowrap overflow-hidden overflow-ellipsis max-w-xs">
+                  <span className="inline-block max-w-xs overflow-hidden overflow-ellipsis">
+                    {item.name}
+                  </span>
+                </td>
                 <td className="px-6 py-4 whitespace-nowrap">{item.category}</td>
                 <td className="px-6 py-4 whitespace-nowrap">{item.price}</td>
                 <td className="px-6 py-4 whitespace-nowrap">{item.quantity}</td>

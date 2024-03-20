@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import Cart from '../Components/Cart';
-import ReactStars from 'react-stars';
+import React, { useState, useEffect } from "react";
+import Cart from "../Components/Cart";
+import ReactStars from "react-stars";
 
 const Shopkids = () => {
   const [data, setData] = useState([]);
-
+  const [num,setNum]=useState(0);
   const getkidData = async () => {
     try {
       const response = await fetch("http://localhost:4000/getkidData");
@@ -20,21 +20,38 @@ const Shopkids = () => {
     }
   };
 
+  const getkidsnumber = async()=>{
+    try {
+      const response = await fetch("http://localhost:4000/getkidnumber");
+      const result=await response.json();
+      if (!response.ok) {
+        console.log(result.error);
+      }
+      if (response.ok) {
+        setNum(result);
+      }
+      
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
     getkidData();
+    getkidsnumber();
   }, []);
 
   return (
     <div className="mt-28 pl-16 pr-16">
       <div className="items-center flex justify-center m-5">
         <a href="">Clothing /</a>
-        <a href="">  Shoes /</a>
+        <a href=""> Shoes /</a>
         <a href=""> Accessories</a>
       </div>
       <div className="flex justify-between items-center">
         <div className="flex gap-3 items-center">
           <h1 className="font-bold text-xl">Kid's Wear</h1>
-          <p className="text-sm text-gray-500 ml-2">1280 products</p>
+          <p className="text-sm text-gray-500 ml-2">{num} products</p>
         </div>
         <div className="flex items-center">
           <label htmlFor="sorting" className="mr-2 rounded-2xl">
@@ -85,12 +102,17 @@ const Shopkids = () => {
       </div>
       <div className="pt-8">
         <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 ">
-          {data.map((product) => (
-            <div key={product.id} className="group relative">
+          {data.map((product, index) => (
+            <div key={index} className="group relative">
               <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
-                <img
-                  src={product.image.url}
+                {/* <img
+                  src={product.image}
                   alt={product.imageAlt}
+                  className="h-full w-full object-cover object-center lg:h-full lg:w-full"
+                /> */}
+                <img
+                  src={`http://localhost:4000/images/${product.image}`} // Correctly construct the image URL
+                  alt={product.name}
                   className="h-full w-full object-cover object-center lg:h-full lg:w-full"
                 />
               </div>

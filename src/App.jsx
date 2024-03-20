@@ -13,6 +13,8 @@ import Addtocart from "./Users/Pages/Addtocart";
 import Wishlist from "./Users/Pages/Wishlist";
 import Contact from "./Users/Pages/Contact";
 import Dashboard from "./Admin/Dashboard";
+import Productpage from "./Users/Pages/Productpage";
+
 
 function App() {
   return (
@@ -48,6 +50,7 @@ function AppContent() {
         <Route path="/women" element={<Shopwomen />} />
         <Route path="/kids" element={<Shopkids />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/ProductDetail" element={<Productpage />} />
       </Routes>
       {/* Conditional rendering for Footer */}
       {shouldShowNavbarAndFooter() && <Footer />}
