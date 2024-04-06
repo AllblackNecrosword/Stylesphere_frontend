@@ -1,6 +1,7 @@
-
 import React, { useEffect, useState } from "react";
 import BlackLogo from "../../images/SS-black.png";
+
+import { Link } from "react-router-dom";
 
 const Search = ({ onClose }) => {
   const [input, setInput] = useState("");
@@ -65,8 +66,14 @@ const Search = ({ onClose }) => {
         <div className="bg-white  shadow-lg w-full  overflow-auto text-center">
           {input &&
             filteredProducts.map((product) => (
-              <div key={product._id} className=" py-3 font-semibold cursor-pointer">
-                <p>{product.name}</p>
+              <div
+                key={product._id}
+                className=" py-3 font-semibold cursor-pointer"
+                onClick={() => setInput("")}
+              >
+                <Link to={`/ProductDetail/${product._id}`}>
+                  <p>{product.name}</p>
+                </Link>
               </div>
             ))}
         </div>

@@ -52,7 +52,7 @@ const Heroproducts = () => {
   return (
     <div>
       <div className="flex justify-center items-center flex-col pt-12">
-        <h1 className="text-center text-3xl font-semibold p-3">
+        <h1 className="text-center text-3xl font-serif font-bold p-3">
           {" "}
           Trending Products
         </h1>

@@ -1,5 +1,5 @@
 import "./App.css";
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Footer from "./Users/Components/Footer";
 import Header from "./Users/Components/Header";
@@ -19,7 +19,6 @@ import Productpage from "./Users/Pages/Productpage";
 function App() {
   return (
     <BrowserRouter>
-      {/* Wrap everything inside BrowserRouter */}
       <AppContent />
     </BrowserRouter>
   );
@@ -27,6 +26,20 @@ function App() {
 
 function AppContent() {
   const location = useLocation();
+  const [cartdata, setCartdata] = useState([]);
+  const [rating, setRating] = useState(0);
+
+
+  //Handle add to cart
+  const carthandler = (value) => {
+    setCartdata([...cartdata, value]);
+    console.log("Parent data", cartdata);
+  };
+
+  //Handle average rating display
+  const handlerating = (value) => {
+    setRating(value); // Update rating state directly
+  };
 
   // Function to determine if Navbar and Footer should be shown
   const shouldShowNavbarAndFooter = () => {
@@ -37,20 +50,28 @@ function AppContent() {
   return (
     <>
       {/* Conditional rendering for Navbar */}
-      {shouldShowNavbarAndFooter() && <Navbar />}
+      {shouldShowNavbarAndFooter() && <Navbar cartdata={cartdata.length} />}
       <Routes>
         <Route path="/" element={<Header />} />
         {/* <Route path="/cart" element={<Cart />} /> */}
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard/*" element={<Dashboard />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/cart" element={<Addtocart />} />
+        <Route path="/cart" element={<Addtocart cartdata={cartdata} />} />
         <Route path="/wishlist" element={<Wishlist />} />
-        <Route path="/men" element={<Shopmen />} />
+        <Route path="/men" element={<Shopmen rating={rating} />} />
         <Route path="/women" element={<Shopwomen />} />
         <Route path="/kids" element={<Shopkids />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/ProductDetail" element={<Productpage />} />
+        <Route
+          path="/ProductDetail/:id"
+          element={
+            <Productpage
+              carthandler={carthandler}
+              handlerating={handlerating}
+            />
+          } // Pass carthandler as prop
+        />
       </Routes>
       {/* Conditional rendering for Footer */}
       {shouldShowNavbarAndFooter() && <Footer />}

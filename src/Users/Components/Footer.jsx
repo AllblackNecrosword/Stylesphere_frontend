@@ -2,68 +2,89 @@ import React from "react";
 
 const Footer = () => {
   return (
-    // <footer className="bg-black text-white py-8 mt-28 ">
-    //   <div className="container mx-auto flex flex-wrap justify-between">
-    //     <div className="footer-section">
-    //       <h3 className="text-lg font-bold mb-4">Explore Nike</h3>
-    //       <ul>
-    //         <li>About Us</li>
-    //         <li>News</li>
-    //         <li>Careers</li>
-    //       </ul>
-    //     </div>
-    //     <div className="footer-section">
-    //       <h3 className="text-lg font-bold mb-4">Customer Service</h3>
-    //       <ul>
-    //         <li>Contact Us</li>
-    //         <li>Shipping</li>
-    //         <li>Returns</li>
-    //       </ul>
-    //     </div>
-    //     <div className="footer-section">
-    //       <h3 className="text-lg font-bold mb-4">Follow Us</h3>
-    //       <ul>
-    //         <li>Instagram</li>
-    //         <li>Facebook</li>
-    //         <li>Twitter</li>
-    //       </ul>
-    //     </div>
-    //   </div>
-    //   <div className="text-center mt-8">
-    //     <p>&copy; 2024 Nike. All rights reserved.</p>
-    //   </div>
-    // </footer>
-    <div className="mt-7">
-  <footer className="bg-gray-100 text-black py-12">
-    <div className="max-w-7xl mx-auto flex flex-wrap justify-between px-4">
-      <div className="w-full sm:w-1/2 md:w-1/3 lg:w-auto mb-8 sm:mb-0">
-        <h3 className="text-xl font-bold mb-4">Support Center</h3>
-        <ul>
-          <li>Email: support@example.com</li>
-          <li>Phone: +1 (123) 456-7890</li>
-          <li>Address: 123 Main Street, City, Country</li>
-        </ul>
+    <footer className="bg-stone-950 text-white mt-24">
+      <div className="px-5 py-10 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8">
+        <div className="grid gap-5 row-gap-8 lg:grid-cols-4 sm:grid-cols-2">
+          <div>
+            <h2 className="mb-6 text-sm font-bold uppercase tracking-wide">
+              Company
+            </h2>
+            <ul className="text-gray-400">
+              <li className="mb-3">About Us</li>
+              <li className="mb-3">Careers</li>
+              <li className="mb-3">Investors</li>
+              <li className="mb-3">Sustainability</li>
+              <li className="mb-3">Contact Us</li>
+            </ul>
+          </div>
+          <div>
+            <h2 className="mb-6 text-sm font-bold uppercase tracking-wide">
+              Help
+            </h2>
+            <ul className="text-gray-400">
+              <li className="mb-3">Help Center</li>
+              <li className="mb-3">Track Order</li>
+              <li className="mb-3">Returns</li>
+              <li className="mb-3">Shipping</li>
+              <li className="mb-3">FAQ</li>
+            </ul>
+          </div>
+          <div >
+            <h2 className="mb-6 text-sm font-bold uppercase tracking-wide">
+              Follow Us
+            </h2>
+            <ul className="text-gray-400">
+              <li className="mb-3">
+                <a className="hover:underline" href="#">
+                  Facebook
+                </a>
+              </li>
+              <li className="mb-3">
+                <a className="hover:underline" href="#">
+                  Twitter
+                </a>
+              </li>
+              <li className="mb-3">
+                <a className="hover:underline" href="#">
+                  Instagram
+                </a>
+              </li>
+              <li className="mb-3">
+                <a className="hover:underline" href="#">
+                  YouTube
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h2 className="mb-6 text-sm font-bold uppercase tracking-wide">
+              More
+            </h2>
+            <ul className="text-gray-400">
+              <li className="mb-3">Terms of Use</li>
+              <li className="mb-3">Privacy Policy</li>
+              <li className="mb-3">Site Map</li>
+            </ul>
+          </div>
+        </div>
       </div>
-      <div className="w-full sm:w-1/2 md:w-1/3 lg:w-auto mb-8 sm:mb-0">
-        <h3 className="text-xl font-bold mb-4">Help</h3>
-        <ul>
-          <li>FAQs</li>
-          <li>Terms of Service</li>
-          <li>Privacy Policy</li>
-        </ul>
+      <div className="flex flex-col items-center justify-between px-5 py-4 mt-10 border-t border-gray-200 sm:flex-row">
+        <p className="text-sm">
+          © 2023 Nike, Inc. All rights reserved.
+        </p>
+        <div className="flex mt-4 space-x-4 sm:mt-0">
+          <a className="text-sm hover:underline" href="#">
+            English (US)
+          </a>
+          <a className="text-sm hover:underline" href="#">
+            Help
+          </a>
+          <a className="text-sm hover:underline" href="#">
+            Terms of Use
+          </a>
+        </div>
       </div>
-      <div className="w-full sm:w-1/2 md:w-1/3 lg:w-auto mb-8 sm:mb-0">
-        <h3 className="text-xl font-bold mb-4">Contact</h3>
-        <ul>
-          <li>Email: contact@example.com</li>
-          <li>Phone: +1 (987) 654-3210</li>
-          <li>Address: 456 Broadway Street, City, Country</li>
-        </ul>
-      </div>
-    </div>
-  </footer>
-</div>
-
+    </footer>
   );
 };
 

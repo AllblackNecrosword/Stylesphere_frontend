@@ -1,27 +1,27 @@
 import React from "react";
 import image from "../../images/Another.jpg";
 
-const AddToCart = () => {
-  const cartdata = [
-    {
-      id: 1,
-      image:image ,
-      name: "Mens Hat collection",
-      price: 12200,
-    },
-    {
-      id: 2,
-      image:  image ,
-      name: "Womes Hat collection",
-      price: 122,
-    },
-    {
-      id: 3,
-      image:  image ,
-      name: "Apple Hat collection",
-      price: 89,
-    },
-  ];
+const AddToCart = ({cartdata}) => {
+  // const cartdata = [
+  //   {
+  //     id: 1,
+  //     image:image ,
+  //     name: "Mens Hat collection",
+  //     price: 12200,
+  //   },
+  //   {
+  //     id: 2,
+  //     image:  image ,
+  //     name: "Womes Hat collection",
+  //     price: 122,
+  //   },
+  //   {
+  //     id: 3,
+  //     image:  image ,
+  //     name: "Apple Hat collection",
+  //     price: 89,
+  //   },
+  // ];
   return (
     <div className="mt-28 px-4">
       <div className="text-2xl font-bold text-center text-blue-800 pb-8">
@@ -35,16 +35,16 @@ const AddToCart = () => {
           <div className="w-1/6 text-center">Price</div>
         </div>
         {
-          cartdata.map((element)=>{
+          cartdata.map((element,index)=>{
             return(
-              <div className="p-4 flex items-center justify-between" >
+              <div className="p-4 flex items-center justify-between" key={index} >
               <div className="w-2/6 flex items-center">
-                <img
-                  src={element.image}
-                  alt="Product Image"
-                  className="w-24 h-24 object-cover rounded mr-5"
+              <img
+                  src={`http://localhost:4000/images/${element.image}`} // Correctly construct the image URL
+                  alt={element.name}
+                  className="h-full w-full object-cover object-center lg:h-40 lg:w-40 p-5"
                 />
-                <p className="text-lg font-semibold">{element.name}</p>
+                <p className="text-lg font-semibold text-justify ">{element.name}</p>
               </div>
               <div className="w-1/6 flex items-center justify-center">
                 <div className="flex items-center">

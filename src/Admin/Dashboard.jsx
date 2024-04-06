@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Home from "./Pages/Home";
-import ProductContent from "./Pages/ProductContent";
+
 import AddProduct from "../Admin/Pages/Addproduct";
 import Order from "./Pages/Order";
 import WhiteLogo from "../images/SS-white.png";
@@ -39,16 +39,8 @@ const Dashboard = () => {
                 <LuLayoutDashboard size={20} className="mr-2" /> Dashboard
               </div>
             </Link>
-            {/* Products Menu Item */}
-            <Link
-              to="/dashboard/products"
-              onClick={() => handleMenuClick("products")}
-              className={`block py-2 px-4 text-white  font-semibold m-2 ${
-                activeMenu === "products" ? "bg-gray-900" : ""
-              } hover:bg-gray-700`}
-            >
-              Products
-            </Link>
+
+         
             {/* Add Products Menu Item */}
             <Link
               to="/dashboard/add-products"
@@ -91,7 +83,6 @@ const Dashboard = () => {
       <div className="flex-1 overflow-y-auto bg-slate-200">
         {/* Display content based on the active menu */}
         {activeMenu === "dashboard" && <Home />}
-        {activeMenu === "products" && <ProductContent />}
         {activeMenu === "add-products" && <AddProduct />}
         {activeMenu === "orders" && <Order />}
       </div>
