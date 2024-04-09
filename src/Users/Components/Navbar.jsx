@@ -7,8 +7,11 @@ import { Link, useLocation } from "react-router-dom";
 import BlackLogo from "../../images/SS-black.png";
 import WhiteLogo from "../../images/SS-white.png";
 import Search from "../Components/Search";
+import { userAuth } from "../../auth/userAuth";
 
 const Navbar = ({ cartdata }) => {
+  const { token, user,Logout } = userAuth();
+
   const [isSticky, setIsSticky] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -169,12 +172,16 @@ const Navbar = ({ cartdata }) => {
               </Link>
 
               {/* Profile button */}
-              <Link
-                to="/login"
-                className="text-back hover:text-stone-500 focus:outline-none px-4 py-2"
-              >
-                <FaRegUser size={22} />
-              </Link>
+              {token ? (
+                <h1 onClick={Logout}>logout</h1>
+              ) : (
+                <Link
+                  to="/login"
+                  className="text-back hover:text-stone-500 focus:outline-none px-4 py-2"
+                >
+                  <FaRegUser size={22} />
+                </Link>
+              )}
             </div>
             <div className="md:hidden">
               <button
@@ -210,14 +217,11 @@ const Navbar = ({ cartdata }) => {
         </div>
       </nav>
       {isSearchOpen && (
-     
         <Search
           onClose={toggleSearch}
           className="md:hidden mt-4"
           inputClassName="block w-full p-4 pl-10 appearance-none leading-tight focus:bg-white focus:border-gray-500 outline-none md:w-1/2"
-          
         />
-      
       )}
       {isSearchOpen && (
         <div

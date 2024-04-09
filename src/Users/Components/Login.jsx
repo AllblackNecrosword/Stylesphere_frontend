@@ -2,15 +2,16 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Incentives from "./Incentives";
+import { userAuth } from "../../auth/userAuth";
 
 const Login = () => {
-  
+  const {setToken, setUser} = userAuth()
   const [input, setInput] = useState({});
   const navigate = useNavigate();
   const handleinput = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
   };
-  console.log(input);
+  // console.log(input);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,10 +24,15 @@ const Login = () => {
         body: JSON.stringify(input),
       });
       const data = await response.json();
-      console.log(data); // Log the data received from the server
+      // console.log(data); // Log the data received from the server
       if (response.ok) {
         // Login successful
-        console.log(data.message);
+        // console.log(data);
+        // console.log('mytoken',data.data.token);
+        localStorage.setItem('token',JSON.stringify(data.data.token))
+        setToken(data.data.token)
+        localStorage.setItem('user',JSON.stringify(data.data.user.name))
+        setUser(data.data.user.name)
         // Redirect based on isAdmin value
         if (data.isAdmin) {
           navigate("/dashboard");

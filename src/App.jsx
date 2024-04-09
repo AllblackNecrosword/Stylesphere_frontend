@@ -14,13 +14,17 @@ import Wishlist from "./Users/Pages/Wishlist";
 import Contact from "./Users/Pages/Contact";
 import Dashboard from "./Admin/Dashboard";
 import Productpage from "./Users/Pages/Productpage";
+import Userprovider from "./auth/userAuth";
 
 
 function App() {
+ 
   return (
+    <Userprovider>
     <BrowserRouter>
-      <AppContent />
+      <AppContent/>
     </BrowserRouter>
+    </Userprovider>
   );
 }
 
@@ -28,8 +32,7 @@ function AppContent() {
   const location = useLocation();
   const [cartdata, setCartdata] = useState([]);
   const [rating, setRating] = useState(0);
-
-
+  
   //Handle add to cart
   const carthandler = (value) => {
     setCartdata([...cartdata, value]);
@@ -50,7 +53,9 @@ function AppContent() {
   return (
     <>
       {/* Conditional rendering for Navbar */}
-      {shouldShowNavbarAndFooter() && <Navbar cartdata={cartdata.length} />}
+      {shouldShowNavbarAndFooter() && (
+        <Navbar cartdata={cartdata.length}  />
+      )}
       <Routes>
         <Route path="/" element={<Header />} />
         {/* <Route path="/cart" element={<Cart />} /> */}
