@@ -9,7 +9,7 @@ import WhiteLogo from "../../images/SS-white.png";
 import Search from "../Components/Search";
 import { userAuth } from "../../auth/userAuth";
 
-const Navbar = ({ cartdata }) => {
+const Navbar = ({ cartdata,favdata }) => {
   const { token, user,Logout } = userAuth();
 
   const [isSticky, setIsSticky] = useState(false);
@@ -146,9 +146,14 @@ const Navbar = ({ cartdata }) => {
               {/* Favorite Icon */}
               <Link
                 to={"/wishlist"}
-                className="text-back hover:text-stone-500 focus:outline-none px-4 py-2"
+                className="text-back hover:text-stone-500 focus:outline-none px-4 py-2 relative"
               >
                 <MdOutlineFavoriteBorder size={24} />
+                {favdata > 0 && (
+                  <div className="absolute top-0 right-0 -mt-1 -mr-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                    {favdata}
+                  </div>
+                )}
               </Link>
 
               {/* Cart Icon */}

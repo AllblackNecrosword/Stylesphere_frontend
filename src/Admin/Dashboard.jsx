@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Home from "./Pages/Home";
-
 import AddProduct from "../Admin/Pages/Addproduct";
 import Order from "./Pages/Order";
 import WhiteLogo from "../images/SS-white.png";
@@ -9,6 +8,7 @@ import { LuLayoutDashboard } from "react-icons/lu";
 import { BiCartAdd } from "react-icons/bi";
 import { MdOutlineFileDownload } from "react-icons/md";
 import { RiLogoutBoxLine } from "react-icons/ri";
+import Users from "./Pages/Users";
 
 const Dashboard = () => {
   const [activeMenu, setActiveMenu] = useState("dashboard");
@@ -40,7 +40,6 @@ const Dashboard = () => {
               </div>
             </Link>
 
-         
             {/* Add Products Menu Item */}
             <Link
               to="/dashboard/add-products"
@@ -62,9 +61,20 @@ const Dashboard = () => {
               } hover:bg-gray-700`}
             >
               <div className="flex items-center">
-               <MdOutlineFileDownload size={23} className="mr-2"/> Orders
+                <MdOutlineFileDownload size={23} className="mr-2" /> Orders
               </div>
-              
+            </Link>
+            {/* Users list */}
+            <Link
+              to="/dashboard/users"
+              onClick={() => handleMenuClick("users")}
+              className={`block py-2 px-4 text-white font-semibold m-2${
+                activeMenu === "users" ? "bg-gray-900" : ""
+              } hover:bg-gray-700`}
+            >
+              <div className="flex items-center">
+                <MdOutlineFileDownload size={23} className="mr-2" /> Users
+              </div>
             </Link>
           </div>
           {/* Logout Button */}
@@ -73,9 +83,9 @@ const Dashboard = () => {
             onClick={() => navigate("/login")}
           >
             <div className="flex items-center">
-              <RiLogoutBoxLine size={25} className="mr-5"/>Logout
+              <RiLogoutBoxLine size={25} className="mr-5" />
+              Logout
             </div>
-            
           </button>
         </div>
       </div>
@@ -85,6 +95,7 @@ const Dashboard = () => {
         {activeMenu === "dashboard" && <Home />}
         {activeMenu === "add-products" && <AddProduct />}
         {activeMenu === "orders" && <Order />}
+        {activeMenu === "users" && <Users />}
       </div>
     </div>
   );

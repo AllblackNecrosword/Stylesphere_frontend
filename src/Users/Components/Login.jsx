@@ -3,11 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Incentives from "./Incentives";
 import { userAuth } from "../../auth/userAuth";
+import { toast } from "react-toastify";
 
 const Login = () => {
-  const {setToken, setUser} = userAuth()
+  const { setToken, setUser, setUserid } = userAuth();
   const [input, setInput] = useState({});
   const navigate = useNavigate();
+
   const handleinput = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
   };
@@ -27,14 +29,26 @@ const Login = () => {
       // console.log(data); // Log the data received from the server
       if (response.ok) {
         // Login successful
-        // console.log(data);
+        toast.success("Login successful", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        console.log("The detail of the login is", data);
         // console.log('mytoken',data.data.token);
-        localStorage.setItem('token',JSON.stringify(data.data.token))
-        setToken(data.data.token)
-        localStorage.setItem('user',JSON.stringify(data.data.user.name))
-        setUser(data.data.user.name)
+        localStorage.setItem("token", JSON.stringify(data.data.token));
+        setToken(data.data.token);
+        localStorage.setItem("user", JSON.stringify(data.data.user.name));
+        setUser(data.data.user.name);
+        localStorage.setItem("_id", JSON.stringify(data.data.user._id));
+        setUserid(data.data.user._id);
         // Redirect based on isAdmin value
-        if (data.isAdmin) {
+        if (data.data.user.isAdmin) {
           navigate("/dashboard");
         } else {
           navigate("/");
@@ -47,6 +61,7 @@ const Login = () => {
       }
     } catch (error) {
       console.error("Internal server error");
+      console.error("Error occurred during login:", error);
     }
   };
 

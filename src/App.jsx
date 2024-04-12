@@ -16,14 +16,12 @@ import Dashboard from "./Admin/Dashboard";
 import Productpage from "./Users/Pages/Productpage";
 import Userprovider from "./auth/userAuth";
 
-
 function App() {
- 
   return (
     <Userprovider>
-    <BrowserRouter>
-      <AppContent/>
-    </BrowserRouter>
+      <BrowserRouter>
+        <AppContent />
+      </BrowserRouter>
     </Userprovider>
   );
 }
@@ -32,10 +30,16 @@ function AppContent() {
   const location = useLocation();
   const [cartdata, setCartdata] = useState([]);
   const [rating, setRating] = useState(0);
-  
+  const [favoriteProducts, setFavoriteProducts] = useState([]);
+
+  //handle add to whishlist
+  const addToFavorites = (product) => {
+    // Add the product to the favorites list
+    setFavoriteProducts([...favoriteProducts, product]);
+  };
   //Handle add to cart
-  const carthandler = (value) => {
-    setCartdata([...cartdata, value]);
+  const carthandler = (data) => {
+    setCartdata([...cartdata, data]);
     console.log("Parent data", cartdata);
   };
 
@@ -53,9 +57,7 @@ function AppContent() {
   return (
     <>
       {/* Conditional rendering for Navbar */}
-      {shouldShowNavbarAndFooter() && (
-        <Navbar cartdata={cartdata.length}  />
-      )}
+      {shouldShowNavbarAndFooter() && <Navbar cartdata={cartdata.length}  favdata={favoriteProducts.length}/>}
       <Routes>
         <Route path="/" element={<Header />} />
         {/* <Route path="/cart" element={<Cart />} /> */}
@@ -63,7 +65,10 @@ function AppContent() {
         <Route path="/dashboard/*" element={<Dashboard />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/cart" element={<Addtocart cartdata={cartdata} />} />
-        <Route path="/wishlist" element={<Wishlist />} />
+        <Route
+          path="/wishlist"
+          element={<Wishlist favoriteProducts={favoriteProducts} />}
+        />
         <Route path="/men" element={<Shopmen rating={rating} />} />
         <Route path="/women" element={<Shopwomen />} />
         <Route path="/kids" element={<Shopkids />} />
@@ -74,6 +79,7 @@ function AppContent() {
             <Productpage
               carthandler={carthandler}
               handlerating={handlerating}
+              addToFavorites={addToFavorites}
             />
           } // Pass carthandler as prop
         />

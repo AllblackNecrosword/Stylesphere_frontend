@@ -5,9 +5,8 @@ import { TailSpin } from "react-loader-spinner";
 
 const Shopmen = (props) => {
   const [data, setData] = useState([]);
-  const [num, setNum] = useState(0);
   const [loading, setLoading] = useState(false);
-
+  const [sortdata, setSortdata] = useState("");
   const getmenData = async () => {
     setLoading(true);
     try {
@@ -25,13 +24,27 @@ const Shopmen = (props) => {
     }
   };
 
- 
-
   useEffect(() => {
     getmenData();
-
   }, []);
   // console.log("Datas", data);
+
+  const sortingHandler = (e) => {
+    e.preventDefault();
+    setSortdata(e.target.value);
+    // console.log("Sorting", sortdata);
+  };
+
+  const displayData = () => {
+    if (sortdata === "lowPrice") {
+      return data.slice().sort((a, b) => a.price - b.price);
+    } else if (sortdata === "highPrice") {
+      return data.slice().sort((a, b) => b.price - a.price);
+    } else if (sortdata == "") {
+      return data;
+    }
+    
+  };
 
   return (
     <div className="mt-28 pl-16 pr-16">
@@ -52,11 +65,16 @@ const Shopmen = (props) => {
               <label htmlFor="sorting" className="mr-2 rounded-2xl">
                 Sort by:
               </label>
-              <select id="sorting" className="px-2 py-1 border rounded">
-                <option value="priceHighToLow">Price: High to Low</option>
-                <option value="priceLowToHigh">Price: Low to High</option>
-                <option value="ratingHighToLow">Rating: High to Low</option>
-                <option value="ratingLowToHigh">Rating: Low to High</option>
+              <select
+                id="sorting"
+                className="px-2 py-1 border rounded"
+                onChange={sortingHandler}
+              >
+                <option value="">choose</option>
+                <option value="highPrice">Price: High to Low</option>
+                <option value="lowPrice">Price: Low to High</option>
+                <option value="highRating">Rating: High to Low</option>
+                <option value="lowRating">Rating: Low to High</option>
               </select>
             </div>
           </div>
@@ -68,7 +86,7 @@ const Shopmen = (props) => {
           </div>
           <div className="pt-8">
             <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 ">
-              {data.map((product, index) => (
+              {displayData().map((product, index) => (
                 <Link to={`/ProductDetail/${product._id}`} key={index}>
                   <div className="group relative">
                     <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">

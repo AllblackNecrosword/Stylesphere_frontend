@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { auth } from "../../Firebase/setup";
 import { RecaptchaVerifier } from "firebase/auth";
 import { signInWithPhoneNumber } from "firebase/auth";
-
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Incentives from "./Incentives";
+import { toast } from "react-toastify";
 
 const Signup = () => {
   const [input, setInput] = useState({});
@@ -22,6 +22,16 @@ const Signup = () => {
   // send OTP
   const sendOtp = async (e) => {
     e.preventDefault();
+    toast.info('OTP sent', {
+      position: "bottom-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      });
     try {
       const recaptcha = new RecaptchaVerifier(auth, "recaptcha", {});
       const confirmation = await signInWithPhoneNumber(

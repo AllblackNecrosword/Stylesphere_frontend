@@ -4,6 +4,7 @@ import { HiOutlineShoppingCart } from "react-icons/hi2";
 import { MdGetApp } from "react-icons/md";
 import { HiEye, HiPencilAlt, HiTrash } from "react-icons/hi";
 import UpdateCard from "../Components/updateProduct"; // Import the UpdateCard component
+import Swal from "sweetalert2";
 
 const Home = () => {
   const [data, setData] = useState([]);
@@ -56,7 +57,46 @@ const Home = () => {
     // Optionally, you can call getProductData() again to refresh the product data after updating
   };
 
-  const handleDelete = async (productId) => {
+  // const handleDelete = async (productId) => {
+  //   try {
+  //     const response = await fetch(
+  //       `http://localhost:4000/api/products/${productId}`,
+  //       {
+  //         method: "DELETE",
+  //       }
+  //     );
+  //     const result = await response.json();
+  //     if (!response.ok) {
+  //       console.log(result.error);
+  //     } else {
+  //       // Remove the deleted product from the state
+  //       setData(data.filter((product) => product._id !== productId));
+  //       console.log("Product deleted successfully");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error deleting product:", error);
+  //   }
+  // };
+  const handleDelete = (productId) => {
+    // Show SweetAlert confirmation dialog
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      // If user confirms the deletion
+      if (result.isConfirmed) {
+        // Call the deleteProduct function
+        deleteProduct(productId);
+      }
+    });
+  };
+
+  const deleteProduct = async (productId) => {
     try {
       const response = await fetch(
         `http://localhost:4000/api/products/${productId}`,
@@ -65,16 +105,27 @@ const Home = () => {
         }
       );
       const result = await response.json();
-
       if (!response.ok) {
         console.log(result.error);
       } else {
         // Remove the deleted product from the state
         setData(data.filter((product) => product._id !== productId));
         console.log("Product deleted successfully");
+        // Show success message using SweetAlert
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
+        });
       }
     } catch (error) {
       console.error("Error deleting product:", error);
+      // Show error message using SweetAlert
+      Swal.fire({
+        title: "Error!",
+        text: "There was an error deleting the product.",
+        icon: "error",
+      });
     }
   };
 
@@ -82,36 +133,34 @@ const Home = () => {
     <div className="bg-slate-200  p-2">
       <div className="m-9 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-10">
         {/* Total product card */}
-        <div className="bg-white p-7 rounded-2xl flex flex-col justify-center items-center hover:shadow-lg">
-          <HiOutlineShoppingCart size={55} />
-          <h2 className="font-semibold text-2xl mt-4 p-2 text-gray-500">
+        <div className="bg-gradient-to-r from-blue-500 to-blue-300 p-7 rounded-2xl flex flex-col justify-center items-center hover:shadow-lg">
+          <HiOutlineShoppingCart size={55} color="white" />
+          <h2 className="font-semibold text-2xl mt-4 p-2 text-white">
             Total products
           </h2>
-          <p className="text-gray-500 text-3xl p-2">{totalProducts}</p>
+          <p className="text-white text-3xl p-2">{totalProducts}</p>
         </div>
         {/* out of stock card */}
-        <div className="bg-white p-7 rounded-2xl flex flex-col justify-center items-center hover:shadow-lg">
-          <MdProductionQuantityLimits size={55} />
-          <h2 className="font-semibold text-2xl mt-4 p-2  text-gray-500">
-            Out of Stock{" "}
+        <div className="bg-gradient-to-r from-green-500 to-green-300 p-7 rounded-2xl flex flex-col justify-center items-center hover:shadow-lg">
+          <MdProductionQuantityLimits size={55} color="white" />
+          <h2 className="font-semibold text-2xl mt-4 p-2  text-white">
+            Store value{" "}
           </h2>
-          <p className="text-gray-500 text-3xl p-2">20</p>
+          <p className="text-white text-3xl p-2">20</p>
         </div>
         {/* order card */}
-        <div className="bg-white p-7 rounded-2xl flex flex-col justify-center items-center hover:shadow-lg">
-          <MdGetApp size={55} color="" />
-          <h2 className="font-semibold text-2xl mt-4 p-2 text-gray-500">
-            Order products
+        <div className="bg-gradient-to-r from-yellow-500 to-yellow-300 p-7 rounded-2xl flex flex-col justify-center items-center hover:shadow-lg">
+          <MdGetApp size={55} color="white" />
+          <h2 className="font-semibold text-2xl mt-4 p-2 text-white">
+            Total Order
           </h2>
-          <p className="text-gray-500 text-3xl p-2">20</p>
+          <p className="text-white text-3xl p-2">20</p>
         </div>
         {/* dummy */}
-        <div className="bg-white p-7 rounded-2xl flex flex-col justify-center items-center hover:shadow-lg">
-          <MdGetApp size={55} color="" />
-          <h2 className="font-semibold text-2xl mt-4 p-2 text-gray-500">
-            Order products
-          </h2>
-          <p className="text-gray-500 text-3xl p-2">20</p>
+        <div className="bg-gradient-to-r from-teal-500 to-teal-300 p-7 rounded-2xl flex flex-col justify-center items-center hover:shadow-lg">
+          <MdGetApp size={55} color="white" />
+          <h2 className="font-semibold text-2xl mt-4 p-2 text-white">Users</h2>
+          <p className="text-white text-3xl p-2">20</p>
         </div>
       </div>
       <div className="mt-3">

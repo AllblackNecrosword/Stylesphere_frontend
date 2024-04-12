@@ -4,8 +4,7 @@ import ReactStars from "react-stars";
 import Incentives from "../Components/Incentives";
 import { TailSpin } from "react-loader-spinner";
 import { ThreeDots } from "react-loader-spinner";
-
-
+import { userAuth } from "../../auth/userAuth";
 const Productpage = (props) => {
   const [product, setProduct] = useState({});
   const [userReview, setUserReview] = useState({
@@ -19,19 +18,7 @@ const Productpage = (props) => {
   const [loading, setLoading] = useState(false);
   const [reviewloading, setReviewLoading] = useState(false);
 
-  // Function to calculate average rating
-  const calculateAverageRating = () => {
-    if (reviews.length === 0) return 0;
-
-    const totalRating = reviews.reduce((acc, review) => acc + review.rating, 0);
-    return totalRating / reviews.length;
-  };
-
-  const addtocarthandler = (product) => {
-    setData([...data, product]);
-    props.carthandler(product);
-    // console.log(data);
-  };
+  const { userid } = userAuth();
 
   useEffect(() => {
     const fetchProductData = async () => {
@@ -53,7 +40,7 @@ const Productpage = (props) => {
     };
     fetchProductData();
   }, [id]);
-  console.log(product);
+  // console.log(product);
 
   const convertToClassName = (name) => {
     return name.replace(/[^a-zA-Z0-9]/g, "_").toLowerCase();
@@ -127,6 +114,70 @@ const Productpage = (props) => {
     props.handlerating(avgRating);
   }, [reviews]);
 
+  // Function to calculate average rating
+  const calculateAverageRating = () => {
+    if (reviews.length === 0) return 0;
+
+    const totalRating = reviews.reduce((acc, review) => acc + review.rating, 0);
+    return totalRating / reviews.length;
+  };
+
+  const addToFavorites = (product) => {
+    props.addToFavorites(product);
+    // console.log("Added to favorites:", product);
+  };
+
+  // const addtocarthandler = (product) => {
+  //   setData([...data, product]);
+  //   props.carthandler(product);
+  //   // console.log(data);
+  // };
+
+  // const addtocarthandler = async (product) => {
+  //   try {
+  //     const response = await fetch("http://localhost:4000/api/cart", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         userId: userid,
+  //         productId: product._id,
+  //       }),
+  //     });
+  //     if (!response.ok) {
+  //       throw new Error("Failed to add product to cart");
+  //     }
+  //     alert("Product added to cart successfully!");
+  //   } catch (error) {
+  //     console.error(error);
+  //     alert("Failed to add product to cart");
+  //   }
+  // };
+  const addtocarthandler = async (product) => {
+    try {
+      const response = await fetch("http://localhost:4000/doc/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: userid,
+          productId: product._id,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error);
+      }
+
+      alert("Product added to cart successfully!");
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
+  };
   return (
     <section className="text-gray-700 body-font overflow-hidden bg-white">
       <div className="container px-5 py-24 mx-auto">
@@ -199,7 +250,10 @@ const Productpage = (props) => {
                 >
                   Add to cart
                 </button>
-                <button className="flex justify-center items-center text-xl font-bold w-full text-black bg-white border py-4 px-8 focus:outline-none hover:border-2 rounded-2xl my-4">
+                <button
+                  className="flex justify-center items-center text-xl font-bold w-full text-black bg-white border py-4 px-8 focus:outline-none hover:border-2 rounded-2xl my-4"
+                  onClick={() => addToFavorites(product)}
+                >
                   Add to favorite
                 </button>
               </div>
