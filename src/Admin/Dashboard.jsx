@@ -9,10 +9,12 @@ import { BiCartAdd } from "react-icons/bi";
 import { MdOutlineFileDownload } from "react-icons/md";
 import { RiLogoutBoxLine } from "react-icons/ri";
 import Users from "./Pages/Users";
+import { userAuth } from "../auth/userAuth";
 
 const Dashboard = () => {
   const [activeMenu, setActiveMenu] = useState("dashboard");
   const navigate = useNavigate();
+  const { Logout } = userAuth();
 
   const handleMenuClick = (menu) => {
     setActiveMenu(menu);
@@ -80,12 +82,13 @@ const Dashboard = () => {
           {/* Logout Button */}
           <button
             className="py-2 px-4 bg-red-600 text-white hover:bg-red-700"
-            onClick={() => navigate("/login")}
+            onClick={Logout} 
           >
-            <div className="flex items-center">
+            <Link to="/login"> <div className="flex items-center">
               <RiLogoutBoxLine size={25} className="mr-5" />
               Logout
-            </div>
+            </div></Link>
+           
           </button>
         </div>
       </div>

@@ -6,7 +6,7 @@ import { userAuth } from "../../auth/userAuth";
 import { toast } from "react-toastify";
 
 const Login = () => {
-  const { setToken, setUser, setUserid } = userAuth();
+  const { setToken, setUser, setUserid, setAuth } = userAuth();
   const [input, setInput] = useState({});
   const navigate = useNavigate();
 
@@ -49,6 +49,8 @@ const Login = () => {
         setUserid(data.data.user._id);
         // Redirect based on isAdmin value
         if (data.data.user.isAdmin) {
+          localStorage.setItem("role",JSON.stringify("Admin"));
+          setAuth("Admin");
           navigate("/dashboard");
         } else {
           navigate("/");

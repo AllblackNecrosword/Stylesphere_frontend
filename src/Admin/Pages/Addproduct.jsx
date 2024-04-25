@@ -235,6 +235,7 @@ const Addproduct = () => {
     image: "",
   });
 
+  console.log(formData);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -264,9 +265,7 @@ const Addproduct = () => {
     e.preventDefault();
     try {
       const addproduct = { ...formData };
-
       // Perform any validation or data processing here
-
       const formDataToSend = new FormData();
       Object.entries(addproduct).forEach(([key, value]) => {
         if (key === "sizes") {

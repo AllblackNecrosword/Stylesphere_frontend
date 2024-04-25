@@ -9,12 +9,16 @@ import WhiteLogo from "../../images/SS-white.png";
 import Search from "../Components/Search";
 import { userAuth } from "../../auth/userAuth";
 
-const Navbar = ({ cartdata,favdata }) => {
-  const { token, user,Logout } = userAuth();
-
+const Navbar = ({ cartdata, favdata }) => {
+  const { token, user, Logout } = userAuth();
   const [isSticky, setIsSticky] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  const handledropdown = () => {
+    setShowDropdown(!showDropdown);
+  };
 
   const location = useLocation();
   const toggleSearch = () => {
@@ -176,17 +180,36 @@ const Navbar = ({ cartdata,favdata }) => {
                 )}
               </Link>
 
-              {/* Profile button */}
+              {/* Profile iconss */}
               {token ? (
-                <h1 onClick={Logout}>logout</h1>
+                <div className="relative">
+                  <div className="hover:text-stone-500 focus:outline-none px-4 py-2">
+                    <FaRegUser size={22} onClick={handledropdown} />
+                  </div>
+                  {showDropdown && (
+                    <ul className="absolute top-full right-0 mt-2 bg-white border border-gray-200 shadow-lg rounded-md">
+                      <li className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
+                        Profile
+                      </li>
+                      <li
+                        className="block px-4 py-2 text-gray-800 hover:bg-gray-100 w-full text-left"
+                        onClick={Logout}
+                      >
+                        Logout
+                      </li>
+                    </ul>
+                  )}
+                </div>
               ) : (
                 <Link
                   to="/login"
                   className="text-back hover:text-stone-500 focus:outline-none px-4 py-2"
                 >
-                  <FaRegUser size={22} />
+                  <h1>Sign In</h1>
                 </Link>
               )}
+
+              {/*  */}
             </div>
             <div className="md:hidden">
               <button

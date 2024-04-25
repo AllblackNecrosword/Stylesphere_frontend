@@ -1,26 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { HiEye, HiPencilAlt, HiTrash } from "react-icons/hi";
 
 const Users = () => {
-  const [data, setData] = useState([
-    {
-      name: "John Doe",
-      category: "Category A",
-      price: 10,
-      quantity: 5,
-      _id: "1", // Dummy ID
-    },
-    {
-      name: "Jane Smith",
-      category: "Category B",
-      price: 20,
-      quantity: 10,
-      _id: "2", // Dummy ID
-    },
-  ]);
+  const [data, setData] = useState([]);
+
+  const fetchuserData = async () => {
+    try {
+      const response = await fetch("http://localhost:4000/getalluser");
+      const result = await response.json();
+      if (!response.ok) {
+        console.log(result.error);
+      }
+      console.log(result);
+      setData(result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    fetchuserData();
+  }, []);
+
   return (
     <div className="m-9">
-      <h2 className="text-2xl font-semibold mb-4">Inventory Products</h2>
+      <h2 className="text-2xl font-semibold mb-4">Users</h2>
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-50">
           <tr>
@@ -40,19 +43,19 @@ const Users = () => {
               scope="col"
               className="px-6 py-3 text-left text-xs text-black font-bold  uppercase tracking-wider"
             >
-              Category
+              Phoneno
             </th>
             <th
               scope="col"
               className="px-6 py-3 text-left text-xs text-black font-bold uppercase tracking-wider"
             >
-              Price
+              Email
             </th>
             <th
               scope="col"
               className="px-6 py-3 text-left text-xs text-black font-bold uppercase tracking-wider"
             >
-              Quantity
+              Role
             </th>
             <th
               scope="col"
@@ -72,9 +75,12 @@ const Users = () => {
                   {item.name}
                 </span>
               </td>
-              <td className="px-6 py-4 whitespace-nowrap">{item.category}</td>
-              <td className="px-6 py-4 whitespace-nowrap">{item.price}</td>
-              <td className="px-6 py-4 whitespace-nowrap">{item.quantity}</td>
+              <td className="px-6 py-4 whitespace-nowrap">{item.phoneno}</td>
+              <td className="px-6 py-4 whitespace-nowrap">{item.email}</td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                {item.isAdmin ? "Admin" : "User"}
+              </td>
+
               <td className="px-6 py-4 whitespace-nowrap flex gap-2">
                 <HiEye
                   className="text-blue-600 cursor-pointer mr-2"

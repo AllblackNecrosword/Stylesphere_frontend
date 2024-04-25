@@ -16,7 +16,11 @@ import Dashboard from "./Admin/Dashboard";
 import Productpage from "./Users/Pages/Productpage";
 import Userprovider from "./auth/userAuth";
 
+import { useNavigate } from 'react-router-dom';
+
+
 function App() {
+
   return (
     <Userprovider>
       <BrowserRouter>
@@ -63,6 +67,7 @@ function AppContent() {
         {/* <Route path="/cart" element={<Cart />} /> */}
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard/*" element={<Dashboard />} />
+      
         <Route path="/signup" element={<Signup />} />
         <Route path="/cart" element={<Addtocart cartdata={cartdata} />} />
         <Route
