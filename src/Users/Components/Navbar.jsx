@@ -10,7 +10,7 @@ import Search from "../Components/Search";
 import { userAuth } from "../../auth/userAuth";
 
 const Navbar = ({ cartdata, favdata }) => {
-  const { token, user, Logout } = userAuth();
+  const { token, user, Logout, auth } = userAuth();
   const [isSticky, setIsSticky] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -138,7 +138,6 @@ const Navbar = ({ cartdata, favdata }) => {
 
             {/* Search Input and Icons */}
             <div className="flex items-center">
-              {/* Search Input */}
               <Link
                 // to={"/"}
                 onClick={toggleSearch}
@@ -146,71 +145,75 @@ const Navbar = ({ cartdata, favdata }) => {
               >
                 <IoSearchOutline size={24} />
               </Link>
-
-              {/* Favorite Icon */}
-              <Link
-                to={"/wishlist"}
-                className="text-back hover:text-stone-500 focus:outline-none px-4 py-2 relative"
-              >
-                <MdOutlineFavoriteBorder size={24} />
-                {favdata > 0 && (
-                  <div className="absolute top-0 right-0 -mt-1 -mr-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
-                    {favdata}
-                  </div>
-                )}
-              </Link>
-
-              {/* Cart Icon */}
-              {/* <Link
-                to={"/cart"}
-                className="text-back hover:text-stone-500 focus:outline-none px-4 py-2"
-              >
-                <MdOutlineShoppingCart size={24} />
-              </Link> */}
-              <Link
-                to={"/cart"}
-                className="text-back hover:text-stone-500 focus:outline-none px-4 py-2 relative"
-              >
-                <MdOutlineShoppingCart size={24} />
-                {/* Display cart item count in a circle */}
-                {cartdata > 0 && (
-                  <div className="absolute top-0 right-0 -mt-1 -mr-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
-                    {cartdata}
-                  </div>
-                )}
-              </Link>
-
-              {/* Profile iconss */}
-              {token ? (
-                <div className="relative">
-                  <div className="hover:text-stone-500 focus:outline-none px-4 py-2">
-                    <FaRegUser size={22} onClick={handledropdown} />
-                  </div>
-                  {showDropdown && (
-                    <ul className="absolute top-full right-0 mt-2 bg-white border border-gray-200 shadow-lg rounded-md">
-                      <li className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
-                        Profile
-                      </li>
-                      <li
-                        className="block px-4 py-2 text-gray-800 hover:bg-gray-100 w-full text-left"
-                        onClick={Logout}
-                      >
-                        Logout
-                      </li>
-                    </ul>
-                  )}
-                </div>
-              ) : (
-                <Link
-                  to="/login"
-                  className="text-back hover:text-stone-500 focus:outline-none px-4 py-2"
-                >
-                  <h1>Sign In</h1>
+              {/* Render Dashboard button if auth is Admin */}
+              {auth === "Admin" ? (
+                <Link to="/dashboard">
+                  <button className="bg-blue-500 p-2 text-white font-semibold rounded-lg">
+                    Dashboard
+                  </button>
                 </Link>
-              )}
+              ) : (
+                <>
+                  {/* Render Wishlist Icon */}
+                  <Link
+                    to={"/wishlist"}
+                    className="text-back hover:text-stone-500 focus:outline-none px-4 py-2 relative"
+                  >
+                    <MdOutlineFavoriteBorder size={24} />
+                    {favdata > 0 && (
+                      <div className="absolute top-0 right-0 -mt-1 -mr-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                        {favdata}
+                      </div>
+                    )}
+                  </Link>
 
-              {/*  */}
+                  {/* Render Cart Icon */}
+                  <Link
+                    to={"/cart"}
+                    className="text-back hover:text-stone-500 focus:outline-none px-4 py-2 relative"
+                  >
+                    <MdOutlineShoppingCart size={24} />
+                    {/* Display cart item count in a circle */}
+                    {cartdata > 0 && (
+                      <div className="absolute top-0 right-0 -mt-1 -mr-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                        {cartdata}
+                      </div>
+                    )}
+                  </Link>
+
+                  {/* Render Profile Icons */}
+                  {token ? (
+                    <div className="relative">
+                      <div className="hover:text-stone-500 focus:outline-none px-4 py-2">
+                        <FaRegUser size={22} onClick={handledropdown} />
+                      </div>
+                      {showDropdown && (
+                        <ul className="absolute top-full right-0 mt-2 bg-white border border-gray-200 shadow-lg rounded-md">
+                          <li className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
+                            Profile
+                          </li>
+                          <li
+                            className="block px-4 py-2 text-gray-800 hover:bg-gray-100 w-full text-left"
+                            onClick={Logout}
+                          >
+                            Logout
+                          </li>
+                        </ul>
+                      )}
+                    </div>
+                  ) : (
+                    // Render Sign In Link if user is not authenticated
+                    <Link
+                      to="/login"
+                      className="text-back hover:text-stone-500 focus:outline-none px-4 py-2"
+                    >
+                      <h1>Sign In</h1>
+                    </Link>
+                  )}
+                </>
+              )}
             </div>
+
             <div className="md:hidden">
               <button
                 onClick={toggleMenu}

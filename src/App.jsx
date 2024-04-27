@@ -15,12 +15,11 @@ import Contact from "./Users/Pages/Contact";
 import Dashboard from "./Admin/Dashboard";
 import Productpage from "./Users/Pages/Productpage";
 import Userprovider from "./auth/userAuth";
-
-import { useNavigate } from 'react-router-dom';
-
+import ProtectedRoute from "./auth/ProtectedRoute";
+import { useNavigate } from "react-router-dom";
+import CartItems from "./Users/Pages/CartItems";
 
 function App() {
-
   return (
     <Userprovider>
       <BrowserRouter>
@@ -61,15 +60,17 @@ function AppContent() {
   return (
     <>
       {/* Conditional rendering for Navbar */}
-      {shouldShowNavbarAndFooter() && <Navbar cartdata={cartdata.length}  favdata={favoriteProducts.length}/>}
+      {shouldShowNavbarAndFooter() && (
+        <Navbar cartdata={cartdata.length} favdata={favoriteProducts.length} />
+      )}
       <Routes>
         <Route path="/" element={<Header />} />
         {/* <Route path="/cart" element={<Cart />} /> */}
         <Route path="/login" element={<Login />} />
-        <Route path="/dashboard/*" element={<Dashboard />} />
-      
+        {/* <ProtectedRoute path="/dashboard/*" element={<Dashboard />} /> */}
+        <Route path="/dashboard/*" element={<ProtectedRoute />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/cart" element={<Addtocart cartdata={cartdata} />} />
+        {/* <Route path="/cart" element={<Addtocart cartdata={cartdata} />} /> */}
         <Route
           path="/wishlist"
           element={<Wishlist favoriteProducts={favoriteProducts} />}
@@ -78,6 +79,7 @@ function AppContent() {
         <Route path="/women" element={<Shopwomen />} />
         <Route path="/kids" element={<Shopkids />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/cart" element={<CartItems />} />
         <Route
           path="/ProductDetail/:id"
           element={

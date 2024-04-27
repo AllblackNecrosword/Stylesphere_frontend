@@ -25,7 +25,8 @@ const Dashboard = () => {
       {/* Left Navigation */}
       <div className="bg-gray-800 w-60 sticky top-0 h-screen overflow-y-auto">
         <div className="flex justify-center pt-8">
-          <img src={WhiteLogo} alt="logo" className="w-8 h-auto" />
+          <Link to="/"><img src={WhiteLogo} alt="logo" className="w-8 h-auto" /></Link>
+          
         </div>
         <div className="flex flex-col justify-between h-full mt-14">
           <div>

@@ -61,7 +61,7 @@ const Shopmen = (props) => {
                 {data.length} products
               </p>
             </div>
-            <div className="flex items-center">
+            <div className="flex items-center font-bold">
               <label htmlFor="sorting" className="mr-2 rounded-2xl">
                 Sort by:
               </label>
@@ -76,6 +76,18 @@ const Shopmen = (props) => {
                 <option value="highRating">Rating: High to Low</option>
                 <option value="lowRating">Rating: Low to High</option>
               </select>
+
+              <div className="flex items-center mx-4">
+              <label htmlFor="category" className="mr-2 rounded-2xl">
+                Category:
+              </label>
+              <select id="category" className="px-2 py-1 border rounded">
+                <option value="shirts">Shirts</option>
+                <option value="pants">Pants</option>
+                <option value="jackets">Jackets</option>
+              </select>
+            </div>
+
             </div>
           </div>
           <div className="mt-4">
@@ -98,7 +110,7 @@ const Shopmen = (props) => {
                     </div>
                     <div className="mt-4 flex justify-between">
                       <div>
-                        <h3 className="text-sm font-medium text-black ">
+                        <h3 className="text-sm font-extrabold text-black ">
                           <a href={product.href}>
                             <span
                               aria-hidden="true"
@@ -110,7 +122,7 @@ const Shopmen = (props) => {
                         <ReactStars
                           count={5}
                           size={18}
-                          color2={"#ffd700"}
+                          color2={"gold"}
                           value={props.rating}
                           edit={false}
                         />

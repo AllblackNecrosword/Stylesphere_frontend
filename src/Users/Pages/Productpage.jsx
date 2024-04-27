@@ -449,7 +449,7 @@ const Productpage = (props) => {
 
   const addtocarthandler = async (product) => {
     try {
-      if(userid){
+      if (userid) {
         const response = await fetch("http://localhost:4000/doc/", {
           method: "POST",
           headers: {
@@ -460,22 +460,53 @@ const Productpage = (props) => {
             productId: product._id,
           }),
         });
-  
+
         if (!response.ok) {
           const errorData = await response.json();
           throw new Error(errorData.error);
         }
-  
+
         alert("Product added to cart successfully!");
-      }else{
+      } else {
         Swal.fire({
-                icon: "warning",
-                title: "Oops...",
-                text: "You must login to add a product to the cart.",
-                footer: '<a href="/login">Login here</a>',
-              });
+          icon: "warning",
+          title: "Oops...",
+          text: "You must login to add a product to the cart.",
+          footer: '<a href="/login">Login here</a>',
+        });
       }
-    
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
+  };
+
+  const addtoFavhandler = async (product) => {
+    try {
+      if (userid) {
+        const response = await fetch("http://localhost:4000/doc/getfavdata", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: userid,
+            productId: product._id,
+          }),
+        });
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error);
+        }
+        alert("product added to wishlist");
+      } else {
+        Swal.fire({
+          icon: "warning",
+          title: "Oops...",
+          text: "You must login to add a product to the cart.",
+          footer: '<a href="/login">Login here</a>',
+        });
+      }
     } catch (error) {
       console.error(error);
       alert(error.message);
@@ -516,7 +547,7 @@ const Productpage = (props) => {
                   <ReactStars
                     count={5}
                     size={34}
-                    color2={"black"}
+                    color2={"gold"}
                     value={averageRating}
                     edit={false}
                   />
@@ -556,7 +587,7 @@ const Productpage = (props) => {
                 </button>
                 <button
                   className="flex justify-center items-center text-xl font-bold w-full text-black bg-white border py-4 px-8 focus:outline-none hover:border-2 rounded-2xl my-4"
-                  onClick={() => addToFavorites(product)}
+                  onClick={() => addtoFavhandler(product)}
                 >
                   Add to favorite
                 </button>
