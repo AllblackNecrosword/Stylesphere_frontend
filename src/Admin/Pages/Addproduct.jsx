@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-
+import { TailSpin, ThreeDots } from "react-loader-spinner";
+import { toast } from "react-toastify";
 const Addproduct = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -11,8 +12,9 @@ const Addproduct = () => {
     sizes: [],
     image: "",
   });
+  const [loading, setLoading] = useState(false);
 
-  console.log(formData);
+  // console.log(formData);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -41,6 +43,7 @@ const Addproduct = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true);
       const addproduct = { ...formData };
       // Perform any validation or data processing here
       const formDataToSend = new FormData();
@@ -68,7 +71,6 @@ const Addproduct = () => {
       const result = await response.json();
 
       if (result._id) {
-        alert("Successfully created a product");
         setFormData({
           name: "",
           price: "",
@@ -79,6 +81,17 @@ const Addproduct = () => {
           sizes: [],
           image: "",
         });
+        toast.success("Product Added Sucessfully", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        setLoading(false);
       } else {
         throw new Error("Failed to create product");
       }
@@ -210,11 +223,16 @@ const Addproduct = () => {
             className="w-full px-3 py-2 border rounded-md"
           />
         </div>
+
         <button
           type="submit"
           className="bg-green-500 text-white px-4 py-2 rounded-md"
         >
-          Submit
+          {loading ? (
+            <TailSpin width={35} height={25} color="white" />
+          ) : (
+            "Submit"
+          )}
         </button>
       </form>
     </div>

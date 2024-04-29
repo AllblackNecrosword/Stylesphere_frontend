@@ -43,7 +43,6 @@ const Shopmen = (props) => {
     } else if (sortdata == "") {
       return data;
     }
-    
   };
 
   return (
@@ -78,16 +77,16 @@ const Shopmen = (props) => {
               </select>
 
               <div className="flex items-center mx-4">
-              <label htmlFor="category" className="mr-2 rounded-2xl">
-                Category:
-              </label>
-              <select id="category" className="px-2 py-1 border rounded">
-                <option value="shirts">Shirts</option>
-                <option value="pants">Pants</option>
-                <option value="jackets">Jackets</option>
-              </select>
-            </div>
-
+                <label htmlFor="category" className="mr-2 rounded-2xl">
+                  Product Type:
+                </label>
+                <select id="category" className="px-2 py-1 border rounded">
+                  <option value="">choose</option>
+                  <option value="shoes">Shoes</option>
+                  <option value="accessories">Accessories</option>
+                  <option value="clothes">Clothes</option>
+                </select>
+              </div>
             </div>
           </div>
           <div className="mt-4">
@@ -103,7 +102,7 @@ const Shopmen = (props) => {
                   <div className="group relative">
                     <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
                       <img
-                        src={`http://localhost:4000/images/${product.image}`}
+                        src={product.image}
                         alt={product.name}
                         className="h-full w-full object-cover object-center lg:h-full lg:w-full"
                       />

@@ -4,6 +4,7 @@ import { HiOutlineShoppingCart } from "react-icons/hi2";
 import { MdGetApp } from "react-icons/md";
 import { HiEye, HiPencilAlt, HiTrash } from "react-icons/hi";
 import UpdateCard from "../Components/updateProduct"; // Import the UpdateCard component
+import ReadCard from "../Components/ReadCard";
 import Swal from "sweetalert2";
 
 const Home = () => {
@@ -11,7 +12,8 @@ const Home = () => {
   const [totalProducts, setTotalProducts] = useState(0);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isUpdateOpen, setIsUpdateOpen] = useState(false);
-
+  const [isReadOpen, setIsReadOpen] = useState(false);
+  const [selectedProductDetails, setSelectedProductDetails] = useState(null);
   // Get all the product data from the database
   const getProductData = async () => {
     const response = await fetch("http://localhost:4000/api/products");
@@ -45,6 +47,11 @@ const Home = () => {
     getTotalProducts();
   }, []);
 
+  const handleReadClick = (product) => {
+    setSelectedProductDetails(product);
+    setIsReadOpen(true);
+  };
+
   const handleUpdateClick = (product) => {
     setSelectedProduct(product);
     setIsUpdateOpen(true);
@@ -57,26 +64,6 @@ const Home = () => {
     // Optionally, you can call getProductData() again to refresh the product data after updating
   };
 
-  // const handleDelete = async (productId) => {
-  //   try {
-  //     const response = await fetch(
-  //       `http://localhost:4000/api/products/${productId}`,
-  //       {
-  //         method: "DELETE",
-  //       }
-  //     );
-  //     const result = await response.json();
-  //     if (!response.ok) {
-  //       console.log(result.error);
-  //     } else {
-  //       // Remove the deleted product from the state
-  //       setData(data.filter((product) => product._id !== productId));
-  //       console.log("Product deleted successfully");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error deleting product:", error);
-  //   }
-  // };
   const handleDelete = (productId) => {
     // Show SweetAlert confirmation dialog
     Swal.fire({
@@ -227,6 +214,7 @@ const Home = () => {
                   <HiEye
                     className="text-blue-600 cursor-pointer mr-2"
                     size={20}
+                    onClick={() => handleReadClick(item)}
                   />
                   <HiPencilAlt
                     className="text-green-600 cursor-pointer mr-2"
@@ -250,6 +238,12 @@ const Home = () => {
           product={selectedProduct}
           onUpdate={handleUpdate}
           onClose={() => setIsUpdateOpen(false)}
+        />
+      )}
+      {isReadOpen && selectedProductDetails && (
+        <ReadCard
+          product={selectedProductDetails}
+          onClose={() => setIsReadOpen(false)}
         />
       )}
     </div>

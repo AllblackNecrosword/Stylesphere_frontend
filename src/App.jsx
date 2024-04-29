@@ -16,8 +16,8 @@ import Dashboard from "./Admin/Dashboard";
 import Productpage from "./Users/Pages/Productpage";
 import Userprovider from "./auth/userAuth";
 import ProtectedRoute from "./auth/ProtectedRoute";
-import { useNavigate } from "react-router-dom";
 import CartItems from "./Users/Pages/CartItems";
+import Profile from "./Users/Pages/Profile";
 
 function App() {
   return (
@@ -80,6 +80,7 @@ function AppContent() {
         <Route path="/kids" element={<Shopkids />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/cart" element={<CartItems />} />
+        <Route path="/profile" element={<Profile />} />
         <Route
           path="/ProductDetail/:id"
           element={

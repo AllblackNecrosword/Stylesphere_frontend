@@ -61,7 +61,7 @@ export default function Wishlist() {
                 <div className="relative ">
                   <img
                     className="block w-full rounded-lg"
-                    src={`http://localhost:4000/images/${element.image}`}
+                    src={element.image}
                     alt="bag"
                   />
                   <button

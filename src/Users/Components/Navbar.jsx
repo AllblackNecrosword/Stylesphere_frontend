@@ -189,9 +189,11 @@ const Navbar = ({ cartdata, favdata }) => {
                       </div>
                       {showDropdown && (
                         <ul className="absolute top-full right-0 mt-2 bg-white border border-gray-200 shadow-lg rounded-md">
+                          <Link to={'/profile'}>
                           <li className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
                             Profile
                           </li>
+                          </Link>
                           <li
                             className="block px-4 py-2 text-gray-800 hover:bg-gray-100 w-full text-left"
                             onClick={Logout}
