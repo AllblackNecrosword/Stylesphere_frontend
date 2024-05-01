@@ -13,7 +13,6 @@ export default function Wishlist() {
       const response = await fetch(
         ` http://localhost:4000/doc/getfavdata/${userid}`
       );
-
       if (!response.ok) {
         const errorMessage = await response.json();
         setError(errorMessage.message);

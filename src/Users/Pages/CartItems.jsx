@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { userAuth } from "../../auth/userAuth";
-
+import KhaltiCheckout from "khalti-checkout-web";
+import config from "../../Khalti/Khalticonfig";
+import { HiTrash } from "react-icons/hi";
 const CartItems = () => {
+  let checkout = new KhaltiCheckout(config);
+
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
 
   const { userid } = userAuth();
+  // console.log("User id",userid);
+
   useEffect(() => {
     const fetchdata = async () => {
       try {
@@ -26,7 +32,7 @@ const CartItems = () => {
     };
     fetchdata();
   }, [userid]);
-  console.log(data);
+  // console.log(data);
 
   const updateCart = async (updatedData) => {
     try {
@@ -72,6 +78,31 @@ const CartItems = () => {
       updatedData[index].quantity -= 1;
       setData(updatedData);
       updateCart(updatedData);
+    }
+  };
+
+ 
+
+  const handleDelete = async (productId, userId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:4000/doc/delete/${userId}/${productId}`,
+        {
+          method: "DELETE",
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to delete product from cart");
+      }
+      // If deletion is successful, update the UI by fetching updated cart data
+      if (response.ok) {
+        // If deletion is successful, update the UI by fetching updated cart data
+        const result = await response.json(); // Parse the response // Set data to the updated cart data array
+        alert("Deleted successfully");
+      }
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
     }
   };
 
@@ -125,20 +156,9 @@ const CartItems = () => {
                       <p className="text-sm">
                         {element.price * element.quantity}
                       </p>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth="1.5"
-                        stroke="currentColor"
-                        className="h-5 w-5 cursor-pointer duration-150 hover:text-red-500"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M6 18L18 6M6 6l12 12"
-                        />
-                      </svg>
+                      <HiTrash
+                        onClick={() => handleDelete(element._id, userid)}
+                      />
                     </div>
                   </div>
                 </div>
@@ -166,7 +186,10 @@ const CartItems = () => {
               <p className="text-sm text-gray-700">including VAT</p>
             </div>
           </div>
-          <button className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600">
+          <button
+            className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600"
+            onClick={() => checkout.show({ amount: 1000 })}
+          >
             Check out
           </button>
         </div>

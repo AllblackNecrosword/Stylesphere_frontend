@@ -1,7 +1,8 @@
+import React, { useEffect, useState } from "react";
+import { TailSpin } from "react-loader-spinner";
+import { toast } from "react-toastify";
 
-import React, { useState } from "react";
-
-const UpdateProduct = ({ onClose }) => {
+const UpdateProduct = ({ onClose, product }) => {
   const [input, setInput] = useState({
     name: "",
     category: "",
@@ -13,24 +14,88 @@ const UpdateProduct = ({ onClose }) => {
     image: "",
   });
 
+  const [loading,setLoading]=useState(false);
+
+  const id = product._id;
+  // console.log(id);
+
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const formData = new FormData();
+      Object.entries(input).forEach(([key, value]) => {
+        if (key === "sizes") {
+          value.forEach((size, index) => {
+            formData.append(`sizes[${index}]`, size);
+          });
+        } else if (key === "image") {
+          formData.append("file", value);
+        } else {
+          formData.append(key, value);
+        }
+      });
+
+      const response = await fetch(`http://localhost:4000/api/products/${id}`, {
+        method: "PATCH",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create product");
+      }
+
+      const result = await response.json();
+      setLoading(false);
+      onClose();
+      toast.success("Product Updated Sucessfully", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      // Handle successful response here, if needed
+    } catch (error) {
+      alert(error.message);
+      console.error(error);
+    }
+  };
+
+  const getinfoHandler = () => {
+    setInput(product);
+  };
   const inputHandler = (e) => {
     setInput({ ...input, [e.target.id]: e.target.value });
     // console.log(input);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    alert("Form submitted!");
-    // You can call onUpdate function here passing input object
-  };
   const handleSizeChange = (e, index) => {
-    const newSizes = [...formData.sizes];
+    const newSizes = [...input.sizes];
     newSizes[index] = e.target.value;
-    setFormData({
-      ...formData,
+    setInput({
+      ...input,
       sizes: newSizes,
     });
   };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setInput({
+      ...input,
+      image: file,
+    });
+  };
+
+  useEffect(() => {
+    getinfoHandler();
+  }, []);
+
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 bg-gray-700 bg-opacity-50 flex justify-center items-center z-50">
       <div className="bg-white p-8 rounded-lg shadow-lg mt-8 w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
@@ -56,7 +121,7 @@ const UpdateProduct = ({ onClose }) => {
             </svg>
           </button>
         </div>
-        <form onSubmit={handleSubmit} className="h-96 overflow-auto">
+        <div className="h-96 overflow-auto">
           {/* Name */}
           <div className="mb-4">
             <label
@@ -175,7 +240,7 @@ const UpdateProduct = ({ onClose }) => {
                 key={index}
                 type="text"
                 id="sizes"
-                value={size}
+                value={input.sizes}
                 onChange={(e) => handleSizeChange(e, index)}
                 className="appearance-none border rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
               />
@@ -191,7 +256,11 @@ const UpdateProduct = ({ onClose }) => {
             </button>
           </div>
           {/* Image */}
-          <div className="mb-4">
+          <div className="w-64">
+            <img src={input.image} alt="image" />
+          </div>
+
+          {/* <div className="mb-4">
             <label
               htmlFor="image"
               className="block text-gray-700 font-bold mb-2"
@@ -201,10 +270,24 @@ const UpdateProduct = ({ onClose }) => {
             <input
               id="image"
               type="file"
-              name="image"
+              name="file"
               accept="image/*"
-              onChange={inputHandler}
+              onChange={handleImageChange}
               className="appearance-none border rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+            />
+          </div> */}
+          <div className="mb-4">
+            <label htmlFor="images" className="block mb-1">
+              Images:
+            </label>
+            <input
+              type="file"
+              id="images"
+              name="images"
+              accept="image/*"
+              multiple
+              onChange={handleImageChange}
+              className="w-full px-3 py-2 border rounded-md"
             />
           </div>
           {/* Buttons */}
@@ -212,8 +295,14 @@ const UpdateProduct = ({ onClose }) => {
             <button
               type="submit"
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg mr-2"
+              onClick={handleSubmit}
             >
-              Update
+              {
+                loading ? (<TailSpin width={35} height={25} color="white" />):(
+                  "Update"
+                )
+              }
+              
             </button>
             <button
               type="button"
@@ -223,7 +312,7 @@ const UpdateProduct = ({ onClose }) => {
               Cancel
             </button>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );
