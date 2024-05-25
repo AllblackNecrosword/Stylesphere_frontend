@@ -9,18 +9,17 @@ import Swal from "sweetalert2";
 
 const Productpage = (props) => {
   const [product, setProduct] = useState({});
+
   const [userReview, setUserReview] = useState({
     comment: "",
     rating: 0,
   });
+
   const [reviews, setReviews] = useState([]);
-  const [averageRating, setAverageRating] = useState(0);
   const [loading, setLoading] = useState(false);
   const [reviewloading, setReviewLoading] = useState(false);
   const { id } = useParams();
-  const { userid } = userAuth();
-
-  // console.log("The data is ",cartItems);
+  const { userid, user } = userAuth();
 
   useEffect(() => {
     const fetchProductData = async () => {
@@ -43,6 +42,7 @@ const Productpage = (props) => {
     fetchProductData();
   }, [id]);
 
+  console.log("Product Detail", product);
   const convertToClassName = (name) => {
     return name.replace(/[^a-zA-Z0-9]/g, "_").toLowerCase();
   };
@@ -71,7 +71,7 @@ const Productpage = (props) => {
         },
         body: JSON.stringify({
           productId: id,
-          username: "kosis",
+          username: user,
           comment: userReview.comment,
           rating: userReview.rating,
         }),
@@ -97,6 +97,7 @@ const Productpage = (props) => {
           console.log(result.error);
         } else {
           setReviews(result);
+          props.handlerating(reviews);
         }
       } catch (error) {
         console.error(error);
@@ -104,63 +105,42 @@ const Productpage = (props) => {
     };
     fetchReviews();
   }, [id]);
+  const totalRating = reviews.reduce((acc, review) => acc + review.rating, 0);
+  console.log("Total Rating", totalRating);
+  const totalRated = reviews.length;
+  console.log("Rated", totalRated);
 
+  // 888888888888888888888888888888888888888888
+  const updateProductRating = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:4000/api/products/review/${id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            rating: totalRating,
+            rated: totalRated,
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to update product rating");
+      }
+      const result = await response.json();
+      return result;
+    } catch (error) {
+      console.error(error);
+      throw new Error("Failed to update product rating");
+    }
+  };
   useEffect(() => {
-    const avgRating = calculateAverageRating();
-    setAverageRating(avgRating);
-    props.handlerating(avgRating);
+    updateProductRating();
   }, [reviews]);
 
-  const calculateAverageRating = () => {
-    if (reviews.length === 0) return 0;
-    const totalRating = reviews.reduce((acc, review) => acc + review.rating, 0);
-    return totalRating / reviews.length;
-  };
-
-  const addToFavorites = (product) => {
-    props.addToFavorites(product);
-  };
-
-  // const addtocarthandler = async (product) => {
-  //   try {
-  //     if (userid) {
-  //       const response = await fetch("http://localhost:4000/doc/", {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify({
-  //           userId: userid,
-  //           productId: product._id,
-  //         }),
-  //       });
-
-  //       // if (!response.ok) {
-  //       //   const errorData = await response.json();
-  //       //   throw new Error(errorData.error);
-  //       // }
-  //       const responseData = await response.json();
-  //       if (response.status === 400) {
-  //         // If the product is already in the cart, show an error message
-  //         // alert(responseData.message);
-  //         console.log(responseData.message);
-  //       } else {
-  //         // If the product is successfully added to the cart, show success message
-  //         alert("Product added to cart successfully!");
-  //       }
-  //     } else {
-  //       Swal.fire({
-  //         icon: "warning",
-  //         title: "Oops...",
-  //         text: "You must login to add a product to the cart.",
-  //         footer: '<a href="/login">Signup here</a>',
-  //       });
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //     alert(error.message);
-  //   }
-  // };
+  // 888888888888888888888888888888888888888888
 
   const addtocarthandler = async (product) => {
     try {
@@ -272,7 +252,7 @@ const Productpage = (props) => {
                     count={5}
                     size={34}
                     color2={"gold"}
-                    value={averageRating}
+                    value={totalRating / totalRated}
                     edit={false}
                   />
                 </div>
@@ -286,11 +266,11 @@ const Productpage = (props) => {
                   Product Category: {product.productType}
                 </p>
                 <div className="flex mt-3 items-center pb-5 border-b-2 border-gray-200 mb-5">
-                  <div>
-                    <p className="font-bold">Product Sizes</p>
-                    <div className="mt-4 flex flex-wrap">
-                      {product.sizes &&
-                        product.sizes.map((size, index) => (
+                  {product.sizes && product.sizes.length > 0 && (
+                    <div>
+                      <p className="font-bold">Product Sizes</p>
+                      <div className="mt-4 flex flex-wrap">
+                        {product.sizes.map((size, index) => (
                           <button
                             key={index}
                             className={`p-2 border rounded-lg m-2 hover:bg-slate-800 hover:text-white ${convertToClassName(
@@ -300,9 +280,11 @@ const Productpage = (props) => {
                             {size}
                           </button>
                         ))}
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
+
                 <button
                   className="flex justify-center items-center text-xl font-bold w-full text-white bg-zinc-950 border-0 py-4 px-8 focus:outline-none hover:bg-slate-700 rounded-2xl my-4"
                   onClick={() => addtocarthandler(product)}
@@ -319,7 +301,7 @@ const Productpage = (props) => {
             </div>
             <div className="container px-5 mx-auto ">
               <div className="lg:w-4/6 mx-auto">
-                <h2 className="font-bold text-3xl flex justify-center ">
+                <h2 className="font-bold text-3xl flex justify-center mt-14">
                   Reviews({reviews.length})
                 </h2>
                 <form onSubmit={handleReviewSubmit}>
@@ -358,8 +340,11 @@ const Productpage = (props) => {
                       <div className="flex justify-between items-center">
                         <div className="flex items-center gap-4">
                           <h3 className="font-bold">{review.username}</h3>
-                          <p className="text-xs text-gray-400">
+                          {/* <p className="text-xs text-gray-400">
                             {review.createdAt}
+                          </p> */}
+                          <p className="text-xs text-gray-400">
+                            {new Date(review.createdAt).toLocaleDateString()}
                           </p>
                         </div>
                         <ReactStars

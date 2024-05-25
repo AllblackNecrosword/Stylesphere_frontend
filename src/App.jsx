@@ -18,6 +18,9 @@ import Userprovider from "./auth/userAuth";
 import ProtectedRoute from "./auth/ProtectedRoute";
 import CartItems from "./Users/Pages/CartItems";
 import Profile from "./Users/Pages/Profile";
+import BotpressChatbot from "./BotpressChatbot";
+import Payment from "./Users/Pages/Payment";
+import ReturnOrder from "./Users/Pages/ReturnOrder";
 
 function App() {
   return (
@@ -25,6 +28,7 @@ function App() {
       <BrowserRouter>
         <AppContent />
       </BrowserRouter>
+      <BotpressChatbot/>
     </Userprovider>
   );
 }
@@ -32,8 +36,13 @@ function App() {
 function AppContent() {
   const location = useLocation();
   const [cartdata, setCartdata] = useState([]);
-  const [rating, setRating] = useState(0);
   const [favoriteProducts, setFavoriteProducts] = useState([]);
+
+
+
+//Passing the data from cart to checkout 
+
+
 
   //handle add to whishlist
   const addToFavorites = (product) => {
@@ -47,9 +56,6 @@ function AppContent() {
   };
 
   //Handle average rating display
-  const handlerating = (value) => {
-    setRating(value); // Update rating state directly
-  };
 
   // Function to determine if Navbar and Footer should be shown
   const shouldShowNavbarAndFooter = () => {
@@ -61,7 +67,7 @@ function AppContent() {
     <>
       {/* Conditional rendering for Navbar */}
       {shouldShowNavbarAndFooter() && (
-        <Navbar cartdata={cartdata.length} favdata={favoriteProducts.length} />
+        <Navbar  />
       )}
       <Routes>
         <Route path="/" element={<Header />} />
@@ -75,18 +81,19 @@ function AppContent() {
           path="/wishlist"
           element={<Wishlist favoriteProducts={favoriteProducts} />}
         />
-        <Route path="/men" element={<Shopmen rating={rating} />} />
+        <Route path="/men" element={<Shopmen />} />
         <Route path="/women" element={<Shopwomen />} />
         <Route path="/kids" element={<Shopkids />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/cart" element={<CartItems />} />
+        <Route path="/contact" element={<ReturnOrder />} />
+        <Route path="/cart" element={<CartItems/>} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/payment" element={<Payment />} />
+        
         <Route
           path="/ProductDetail/:id"
           element={
             <Productpage
               carthandler={carthandler}
-              handlerating={handlerating}
               addToFavorites={addToFavorites}
             />
           } // Pass carthandler as prop

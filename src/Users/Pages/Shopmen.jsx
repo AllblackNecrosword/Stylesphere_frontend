@@ -3,10 +3,13 @@ import { Link } from "react-router-dom";
 import ReactStars from "react-stars";
 import { TailSpin } from "react-loader-spinner";
 
-const Shopmen = (props) => {
+const Shopmen = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [sortdata, setSortdata] = useState("");
+  const [productType, setProductType] = useState("");
+  const [sort, setSort] = useState({});
+
   const getmenData = async () => {
     setLoading(true);
     try {
@@ -27,12 +30,35 @@ const Shopmen = (props) => {
   useEffect(() => {
     getmenData();
   }, []);
-  // console.log("Datas", data);
+  console.log("Datas", data);
+
+  const getsingleproduct = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:4000/getsingleMenproduct/${sortdata}`
+      );
+      if (!response.ok) {
+        console.log(response.error);
+      }
+      if (response.ok) {
+        const result = await response.json();
+        setSort(result);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  // console.log(sort);
 
   const sortingHandler = (e) => {
     e.preventDefault();
     setSortdata(e.target.value);
     // console.log("Sorting", sortdata);
+    getsingleproduct();
+  };
+
+  const handleProductTypeChange = (e) => {
+    setProductType(e.target.value); // Update the selected product type
   };
 
   const displayData = () => {
@@ -46,21 +72,21 @@ const Shopmen = (props) => {
   };
 
   return (
-    <div className="mt-28 pl-16 pr-16">
-      {loading ? ( // Display loader if loading is true
+    <div className="mt-24 p-4 sm:p-8 md:p-12 lg:p-16 xl:p-24 lg:mt-6">
+      {loading ? (
         <div className="flex justify-center items-center h-screen">
           <TailSpin color="black" width={100} height={100} />
         </div>
       ) : (
         <div>
-          <div className="flex justify-between items-center">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center">
             <div className="flex gap-3 items-center">
               <h1 className="font-bold text-2xl font-poppins">Mens Wear</h1>
               <p className="text-sm text-gray-500 ml-2 font-semibold">
                 {data.length} products
               </p>
             </div>
-            <div className="flex items-center font-bold">
+            <div className="flex items-center font-bold mt-4 sm:mt-0">
               <label htmlFor="sorting" className="mr-2 rounded-2xl">
                 Sort by:
               </label>
@@ -76,23 +102,28 @@ const Shopmen = (props) => {
                 <option value="lowRating">Rating: Low to High</option>
               </select>
 
-              <div className="flex items-center mx-4">
-                <label htmlFor="category" className="mr-2 rounded-2xl">
-                  Product Type:
+              {/* <div className="flex items-center mx-4">
+                <label htmlFor="category" className="mr-2 rounded-2xl ">
+                 Type:
                 </label>
-                <select id="category" className="px-2 py-1 border rounded">
+                <select
+                  id="category"
+                  className="px-2 py-1 border rounded"
+                  value={productType}
+                  onChange={handleProductTypeChange}
+                >
                   <option value="">choose</option>
                   <option value="shoes">Shoes</option>
                   <option value="accessories">Accessories</option>
                   <option value="clothes">Clothes</option>
                 </select>
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="mt-4">
             <hr className="border-t border-gray-400" />
           </div>
-          <div className="mt-4 flex gap-4">
+          <div className="mt-4 flex flex-col sm:flex-row sm:justify-between sm:items-center">
             {/* Your category, size, color selectors */}
           </div>
           <div className="pt-8">
@@ -120,20 +151,15 @@ const Shopmen = (props) => {
                         </h3>
                         <ReactStars
                           count={5}
-                          size={18}
-                          color2={"gold"}
-                          value={props.rating}
-                          edit={false}
+                          value={product.rating}
+                          color="#f9b115"
+                          size="18px"
+                          onChange={() => console.log("rate: ", product._id)}
                         />
                       </div>
-                      <div>
-                        <p className="text-base font-bold text-gray-900">
-                          <span className="text-red-500 line-through px-4">
-                            {/* ${product.price} */}
-                          </span>
-                          ${product.price}
-                        </p>
-                      </div>
+                      <p className="mt-1 text-lg font-bold text-gray-900">
+                        ${product.price}
+                      </p>
                     </div>
                   </div>
                 </Link>

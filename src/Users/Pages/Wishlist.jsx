@@ -28,7 +28,28 @@ export default function Wishlist() {
   useEffect(() => {
     fetchdata();
   }, [userid]);
-  console.log("fav data", data);
+  // console.log("fav data", data);
+  const deleteItem = async (productId, userid) => {
+    // console.log(productId,userid);
+    try {
+      const response = await fetch(
+        `http://localhost:4000/doc/deletewish/${userid}/${productId}`,
+        {
+          method: "DELETE",
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to delete product from cart");
+      }
+      if (response.ok) {
+        const result = await response.json(); // Parse the response // Set data to the updated cart data array
+        alert("Deleted successfully");
+      }
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
+  };
 
   return (
     <div className="container mx-auto px-4 md:px-6 2xl:px-0 py-12">
@@ -67,7 +88,10 @@ export default function Wishlist() {
                     aria-label="close"
                     className="top-4 right-4 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 absolute p-1.5 bg-gray-800 text-white hover:text-gray-400 rounded-full"
                   >
-                    <FaTimes size={18} />
+                    <FaTimes
+                      size={18}
+                      onClick={() => deleteItem(element._id, userid)}
+                    />
                   </button>
                 </div>
                 <div className="mt-6 flex justify-between items-center">

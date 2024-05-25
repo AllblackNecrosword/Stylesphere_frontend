@@ -2,47 +2,14 @@ import React, { useEffect, useState } from "react";
 import { HiEye, HiTrash } from "react-icons/hi";
 import ReadOrder from "../Components/ReadOrder";
 
-const Order = (props) => {
+const Cancelorder = () => {
   const [data, setData] = useState([]);
   const [isReadOpen, setIsReadOpen] = useState(false);
   const [selectedProductDetails, setSelectedProductDetails] = useState(null);
 
-  const handleStatusupdate = async (e, productId) => {
-    const newStatus = e.target.value;
-    try {
-      const response = await fetch(`http://localhost:4000/order/${productId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ status: newStatus }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to update order");
-      }
-
-      // Update the status in the local state
-      const updatedData = data.map((item) => {
-        if (item._id === productId) {
-          return { ...item, status: newStatus };
-        }
-        return item;
-      });
-      setData(updatedData);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleReadClick = (product) => {
-    setSelectedProductDetails(product);
-    setIsReadOpen(true);
-  };
-
   const fetchOrder = async () => {
     try {
-      const response = await fetch(`http://localhost:4000/order/getorder`);
+      const response = await fetch(`http://localhost:4000/order/cancelorder`);
       if (!response.ok) {
         console.log("Error fetching data");
       }
@@ -53,19 +20,35 @@ const Order = (props) => {
     }
   };
 
-  props.getTotalorder(data.length);
-
-  const handleDelete = async (productId) => {
-    try {
-      // Add code to handle deletion of order
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   useEffect(() => {
     fetchOrder();
   }, []);
+
+  const handleReadClick = (product) => {
+    setSelectedProductDetails(product);
+    setIsReadOpen(true);
+  };
+
+  const handleDelete = async (item) => {
+    const orderid = item._id;
+    try {
+      const response = await fetch(
+        `http://localhost:4000/order/deleteorder/${orderid}`,
+        {
+          method: "DELETE",
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to delete the order");
+      }
+      // Remove the deleted item from the state
+      alert("Sucessfully deleted the order");
+      setData((prevData) => prevData.filter((order) => order._id !== orderid));
+    } catch (error) {
+      console.error("Delete error:", error);
+    }
+  };
+  // console.log(data);
 
   return (
     <div className="m-9">
@@ -133,31 +116,20 @@ const Order = (props) => {
               <td className="px-6 py-4 whitespace-nowrap">
                 {item.shippingAddress.name}
               </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <select
-                  value={item.status}
-                  className="border border-gray-300 rounded-md px-3 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                  onChange={(e) => handleStatusupdate(e, item._id)}
-                >
-                  <option value="Pending">Pending</option>
-                  <option value="Processing">Processing</option>
-                  <option value="Shipped">Shipped</option>
-                  <option value="Delivered">Delivered</option>
-                  <option value="Cancelled">Cancelled</option>
-                </select>
-              </td>
+              <td className="px-6 py-4 whitespace-nowrap">{item.status}</td>
 
-              <td className="px-6 py-4 whitespace-nowrap flex gap-2">
+              <td className="px-6 py-4 whitespace-nowrap flex gap-2 items-center">
                 <HiEye
                   className="text-blue-600 cursor-pointer mr-2"
-                  size={20}
+                  size={30}
                   onClick={() => handleReadClick(item)}
                 />
-                <HiTrash
-                  className="text-red-600 cursor-pointer"
-                  size={20}
-                  onClick={() => handleDelete(item._id)}
-                />
+                <button
+                  className="bg-red-700 p-2 rounded-2xl text-white"
+                  onClick={() => handleDelete(item)}
+                >
+                  Cancel
+                </button>
               </td>
             </tr>
           ))}
@@ -173,4 +145,4 @@ const Order = (props) => {
   );
 };
 
-export default Order;
+export default Cancelorder;

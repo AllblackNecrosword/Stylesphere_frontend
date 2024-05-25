@@ -3,7 +3,10 @@ import { userAuth } from "../../auth/userAuth";
 import KhaltiCheckout from "khalti-checkout-web";
 import config from "../../Khalti/Khalticonfig";
 import { HiTrash } from "react-icons/hi";
-const CartItems = () => {
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
+const CartItems = ({ props }) => {
   let checkout = new KhaltiCheckout(config);
 
   const [data, setData] = useState([]);
@@ -11,6 +14,10 @@ const CartItems = () => {
 
   const { userid } = userAuth();
   // console.log("User id",userid);
+  // console.log("The cart data", data);
+
+
+
 
   useEffect(() => {
     const fetchdata = async () => {
@@ -24,6 +31,7 @@ const CartItems = () => {
         } else {
           const result = await response.json();
           setData(result);
+          props.handlecheckout(data);
         }
       } catch (error) {
         console.log(error);
@@ -32,7 +40,7 @@ const CartItems = () => {
     };
     fetchdata();
   }, [userid]);
-  // console.log(data);
+  console.log(data);
 
   const updateCart = async (updatedData) => {
     try {
@@ -80,8 +88,6 @@ const CartItems = () => {
       updateCart(updatedData);
     }
   };
-
- 
 
   const handleDelete = async (productId, userId) => {
     try {
@@ -186,11 +192,8 @@ const CartItems = () => {
               <p className="text-sm text-gray-700">including VAT</p>
             </div>
           </div>
-          <button
-            className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600"
-            onClick={() => checkout.show({ amount: 1000 })}
-          >
-            Check out
+          <button className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600">
+            <Link to={"/payment"}>Check out</Link>
           </button>
         </div>
       </div>

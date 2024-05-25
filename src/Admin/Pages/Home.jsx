@@ -7,13 +7,15 @@ import UpdateCard from "../Components/updateProduct"; // Import the UpdateCard c
 import ReadCard from "../Components/ReadCard";
 import Swal from "sweetalert2";
 
-const Home = () => {
+const Home = (props) => {
   const [data, setData] = useState([]);
   const [totalProducts, setTotalProducts] = useState(0);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isUpdateOpen, setIsUpdateOpen] = useState(false);
   const [isReadOpen, setIsReadOpen] = useState(false);
   const [selectedProductDetails, setSelectedProductDetails] = useState(null);
+  const [numorder, setNumorder]=useState(null);
+
   // Get all the product data from the database
   const getProductData = async () => {
     const response = await fetch("http://localhost:4000/api/products");
@@ -41,6 +43,9 @@ const Home = () => {
       setTotalProducts(result.product); // Assuming the response from backend is an object with a property named 'product'
     }
   };
+
+// Get all the total order number from the callback
+
 
   useEffect(() => {
     getProductData();
@@ -141,7 +146,7 @@ const Home = () => {
           <h2 className="font-semibold text-2xl mt-4 p-2 text-white">
             Total Order
           </h2>
-          <p className="text-white text-3xl p-2">20</p>
+          <p className="text-white text-3xl p-2">{props.numorder}</p>
         </div>
         {/* dummy */}
         <div className="bg-gradient-to-r from-teal-500 to-teal-300 p-7 rounded-2xl flex flex-col justify-center items-center hover:shadow-lg">
