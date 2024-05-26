@@ -22,7 +22,54 @@ const Signup = () => {
   // send OTP
   const sendOtp = async (e) => {
     e.preventDefault();
-    toast.info('OTP sent', {
+    // Basic validation
+    if (!input.name || !input.phoneno || !input.email || !input.password) {
+      toast.error("All fields are required", {
+        position: "bottom-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      return;
+    }
+
+    // Phone number validation
+    const phonePattern = /^[0-9]{10}$/;
+    if (!phonePattern.test(input.phoneno)) {
+      toast.error("Phone number must be exactly 10 digits", {
+        position: "bottom-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      return;
+    }
+
+    // Email validation
+    const emailPattern = /^[^\s@]+@gmail\.com$/;
+    if (!emailPattern.test(input.email)) {
+      toast.error("Email must be a valid @gmail.com address", {
+        position: "bottom-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      return;
+    }
+
+    toast.info("OTP sent", {
       position: "bottom-center",
       autoClose: 5000,
       hideProgressBar: false,
@@ -31,7 +78,7 @@ const Signup = () => {
       draggable: true,
       progress: undefined,
       theme: "light",
-      });
+    });
     try {
       const recaptcha = new RecaptchaVerifier(auth, "recaptcha", {});
       const confirmation = await signInWithPhoneNumber(
@@ -46,7 +93,7 @@ const Signup = () => {
     }
   };
 
-  //Verify OTP
+  // Verify OTP
   const verifyOtp = async (e) => {
     e.preventDefault();
     try {
@@ -68,7 +115,6 @@ const Signup = () => {
   const submithandler = async (e) => {
     e.preventDefault();
     try {
-    
       const addUser = { ...input };
       const response = await fetch("http://localhost:4000/api/signup", {
         method: "POST",
@@ -85,7 +131,7 @@ const Signup = () => {
       if (response.ok) {
         // Registration successful
         navigate("/login");
-        toast.info('Registration Successful', {
+        toast.info("Registration Successful", {
           position: "bottom-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -94,7 +140,7 @@ const Signup = () => {
           draggable: true,
           progress: undefined,
           theme: "light",
-          });
+        });
       }
       setInput("");
     } catch (error) {
@@ -180,9 +226,9 @@ const Signup = () => {
                     Password
                   </label>
                   <div className="text-sm">
-                    <a href="#" className="font-semibold text-black ">
+                    {/* <a href="#" className="font-semibold text-black ">
                       Forgot password?
-                    </a>
+                    </a> */}
                   </div>
                 </div>
                 <div className="mt-2">
@@ -209,7 +255,6 @@ const Signup = () => {
               </div>
               <div id="recaptcha"></div>
             </form>
-
             <p className="mt-10 text-center text-sm text-gray-500">
               Already have an account?{" "}
               <a href="#" className="font-semibold leading-6 text-gray-500 ">

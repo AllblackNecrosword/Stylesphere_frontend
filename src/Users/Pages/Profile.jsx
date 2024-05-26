@@ -12,7 +12,7 @@ const Profile = () => {
 
   return (
     <div className="flex h-screen">
-      <div className="w-60 sticky top-0 h-screen overflow-y-auto border rounded-lg text-center font-semibold mt-12">
+      {/* <div className="w-60 sticky top-0 h-screen overflow-y-auto border rounded-lg text-center font-semibold mt-12">
         <div
           className={`mt-14 cursor-pointer hover:bg-blue-100 p-3 ${
             activeOption === "ACCOUNT" && "bg-blue-100"
@@ -53,7 +53,7 @@ const Profile = () => {
         >
           LOGOUT
         </div>
-      </div>
+      </div> */}
       <div className="flex-1">
         {activeOption && (
           <div className="ml-4 ">

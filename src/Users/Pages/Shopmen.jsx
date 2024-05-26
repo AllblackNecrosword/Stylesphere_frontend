@@ -98,26 +98,7 @@ const Shopmen = () => {
                 <option value="">choose</option>
                 <option value="highPrice">Price: High to Low</option>
                 <option value="lowPrice">Price: Low to High</option>
-                <option value="highRating">Rating: High to Low</option>
-                <option value="lowRating">Rating: Low to High</option>
               </select>
-
-              {/* <div className="flex items-center mx-4">
-                <label htmlFor="category" className="mr-2 rounded-2xl ">
-                 Type:
-                </label>
-                <select
-                  id="category"
-                  className="px-2 py-1 border rounded"
-                  value={productType}
-                  onChange={handleProductTypeChange}
-                >
-                  <option value="">choose</option>
-                  <option value="shoes">Shoes</option>
-                  <option value="accessories">Accessories</option>
-                  <option value="clothes">Clothes</option>
-                </select>
-              </div> */}
             </div>
           </div>
           <div className="mt-4">

@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import image5 from "../../images/banner2.jpg";
-import image6 from "../../images/banner.jpg"; // Add another image
 import { FaCircleArrowUp } from "react-icons/fa6";
 
 const Banner = () => {

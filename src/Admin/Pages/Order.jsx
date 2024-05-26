@@ -69,7 +69,7 @@ const Order = (props) => {
 
   return (
     <div className="m-9">
-      <h2 className="text-2xl font-semibold mb-4">Users</h2>
+      <h2 className="text-2xl font-bold mb-4">Orders</h2>
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-50">
           <tr>

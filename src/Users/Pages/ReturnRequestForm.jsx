@@ -1,11 +1,13 @@
+
+
 // import React, { useState } from "react";
 
-// const ReturnRequestForm = () => {
-
+// const ReturnRequestForm = ({ selectedProductDetails }) => {
 //   const [formData, setFormData] = useState({
+//     orderId: selectedProductDetails._id,
 //     reason: "",
-//     isDefective,
-//     comment,
+//     isDefective: false, // Initialize isDefective with a default value
+//     comment: "",
 //   });
 
 //   const handleChange = (e) => {
@@ -15,9 +17,37 @@
 //       [id]: value,
 //     });
 //   };
-//   console.log(formData);
-//   const handleSubmit = (e) => {
+
+//   const handleSubmit = async (e) => {
 //     e.preventDefault();
+//     try {
+//       const response = await fetch(
+//         "http://localhost:4000/order/returnform",
+//         {
+//           method: "POST",
+//           headers: {
+//             "Content-Type": "application/json",
+//           },
+//           body: JSON.stringify(formData),
+//         }
+//       );
+//       if (!response.ok) {
+//         throw new Error("Failed to submit return request");
+//       }
+//       const data = await response.json();
+//       console.log("Return request submitted successfully:", data);
+//       alert("Sucessfull")
+//       // Reset form data after successful submission if needed
+//       setFormData({
+//         orderId: selectedProductDetails._id,
+//         reason: "",
+//         isDefective: false,
+//         comment: "",
+//       });
+//     } catch (error) {
+//       console.error("Error submitting return request:", error);
+//       // Handle error here
+//     }
 //   };
 
 //   return (
@@ -33,7 +63,7 @@
 //           type="text"
 //           id="reason"
 //           name="reason"
-//           value={reason}
+//           value={formData.reason} // Use formData.reason instead of reason directly
 //           onChange={handleChange}
 //           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 //           required
@@ -49,7 +79,7 @@
 //         </label>
 //         <select
 //           id="isDefective"
-//           value={isDefective}
+//           value={formData.isDefective} // Use formData.isDefective instead of isDefective directly
 //           onChange={handleChange}
 //           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 //         >
@@ -65,45 +95,13 @@
 //         </label>
 //         <textarea
 //           id="comment"
-//           value={comment}
+//           value={formData.comment} // Use formData.comment instead of comment directly
 //           onChange={handleChange}
 //           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 //           rows="3"
 //           placeholder="General demo comment for a sales order header."
 //         />
 //       </div>
-
-//       {/* <div className="mb-4">
-//         <label htmlFor="file" className="block text-gray-700 font-bold mb-2">
-//           File attachments
-//         </label>
-//         <div className="flex items-center justify-center w-full">
-//           <label
-//             htmlFor="file"
-//             className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 hover:border-gray-400"
-//           >
-//             <div className="flex flex-col items-center justify-center pt-5 pb-6">
-//               <svg
-//                 className="w-12 h-12 text-gray-400 group-hover:text-gray-600"
-//                 stroke="currentColor"
-//                 fill="none"
-//                 viewBox="0 0 48 48"
-//                 aria-hidden="true"
-//               >
-//               </svg>
-//               <p className="pt-1 text-sm tracking-wider text-gray-500">
-//                 Choose a file or drag it here
-//               </p>
-//             </div>
-//             <input
-//               type="file"
-//               id="file"
-//               onChange={(e) => setFile(e.target.files[0])}
-//               className="hidden"
-//             />
-//           </label>
-//         </div>
-//       </div> */}
 
 //       <div className="flex items-center justify-end">
 //         <button
@@ -118,16 +116,18 @@
 // };
 
 // export default ReturnRequestForm;
-
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 
 const ReturnRequestForm = ({ selectedProductDetails }) => {
   const [formData, setFormData] = useState({
     orderId: selectedProductDetails._id,
     reason: "",
-    isDefective: false, // Initialize isDefective with a default value
+    isDefective: "", // Initialize as empty string
     comment: "",
   });
+
+  const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -137,35 +137,76 @@ const ReturnRequestForm = ({ selectedProductDetails }) => {
     });
   };
 
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.reason) newErrors.reason = "Reason is required";
+    if (formData.isDefective === "") newErrors.isDefective = "Defective status is required";
+    if (!formData.comment) newErrors.comment = "Comment is required";
+    return newErrors;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const validationErrors = validateForm();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      toast.error("Please fill in all required fields", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      return;
+    }
+
     try {
-      const response = await fetch(
-        "http://localhost:4000/order/returnform",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+      const response = await fetch("http://localhost:4000/order/returnform", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
       if (!response.ok) {
         throw new Error("Failed to submit return request");
       }
       const data = await response.json();
       console.log("Return request submitted successfully:", data);
-      alert("Sucessfull")
+      toast.success("Return request submitted successfully", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+
       // Reset form data after successful submission if needed
       setFormData({
         orderId: selectedProductDetails._id,
         reason: "",
-        isDefective: false,
+        isDefective: "",
         comment: "",
       });
+      setErrors({});
     } catch (error) {
       console.error("Error submitting return request:", error);
-      // Handle error here
+      toast.error("Error submitting return request", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     }
   };
 
@@ -182,11 +223,14 @@ const ReturnRequestForm = ({ selectedProductDetails }) => {
           type="text"
           id="reason"
           name="reason"
-          value={formData.reason} // Use formData.reason instead of reason directly
+          value={formData.reason} 
           onChange={handleChange}
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.reason && 'border-red-500'}`}
           required
         />
+        {errors.reason && (
+          <p className="text-red-500 text-xs italic">{errors.reason}</p>
+        )}
       </div>
 
       <div className="mb-4">
@@ -194,32 +238,40 @@ const ReturnRequestForm = ({ selectedProductDetails }) => {
           htmlFor="isDefective"
           className="block text-gray-700 font-bold mb-2"
         >
-          Defective
+          Defective*
         </label>
         <select
           id="isDefective"
-          value={formData.isDefective} // Use formData.isDefective instead of isDefective directly
+          value={formData.isDefective} 
           onChange={handleChange}
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.isDefective && 'border-red-500'}`}
+          required
         >
           <option value="">Select an option</option>
-          <option value={true}>Yes</option>
-          <option value={false}>No</option>
+          <option value="true">Yes</option>
+          <option value="false">No</option>
         </select>
+        {errors.isDefective && (
+          <p className="text-red-500 text-xs italic">{errors.isDefective}</p>
+        )}
       </div>
 
       <div className="mb-4">
         <label htmlFor="comment" className="block text-gray-700 font-bold mb-2">
-          Comments
+          Comments*
         </label>
         <textarea
           id="comment"
-          value={formData.comment} // Use formData.comment instead of comment directly
+          value={formData.comment} 
           onChange={handleChange}
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.comment && 'border-red-500'}`}
           rows="3"
           placeholder="General demo comment for a sales order header."
+          required
         />
+        {errors.comment && (
+          <p className="text-red-500 text-xs italic">{errors.comment}</p>
+        )}
       </div>
 
       <div className="flex items-center justify-end">

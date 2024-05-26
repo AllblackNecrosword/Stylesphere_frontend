@@ -41,7 +41,8 @@ const CartItems = ({ props }) => {
     fetchdata();
   }, [userid]);
   console.log(data);
-
+  
+  
   const updateCart = async (updatedData) => {
     try {
       const response = await fetch("http://localhost:4000/doc/updatecart", {

@@ -47,21 +47,21 @@ const Shopkids = (props) => {
   };
 
   return (
-    <div className="mt-28 pl-16 pr-16">
+    <div className="mt-24 p-4 sm:p-8 md:p-12 lg:p-16 xl:p-24 lg:mt-6">
       {loading ? ( // Display loader if loading is true
         <div className="flex justify-center items-center h-screen">
           <TailSpin color="black" width={100} height={100} />
         </div>
       ) : (
         <div>
-          <div className="flex justify-between items-center">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center">
             <div className="flex gap-3 items-center">
               <h1 className="font-bold text-2xl font-poppins">Mens Wear</h1>
               <p className="text-sm text-gray-500 ml-2 font-semibold">
                 {data.length} products
               </p>
             </div>
-            <div className="flex items-center font-bold">
+            <div className="flex items-center font-bold mt-4 sm:mt-0">
               <label htmlFor="sorting" className="mr-2 rounded-2xl">
                 Sort by:
               </label>
@@ -73,27 +73,13 @@ const Shopkids = (props) => {
                 <option value="">choose</option>
                 <option value="highPrice">Price: High to Low</option>
                 <option value="lowPrice">Price: Low to High</option>
-                <option value="highRating">Rating: High to Low</option>
-                <option value="lowRating">Rating: Low to High</option>
               </select>
-
-              <div className="flex items-center mx-4">
-                <label htmlFor="category" className="mr-2 rounded-2xl">
-                  Product Type:
-                </label>
-                <select id="category" className="px-2 py-1 border rounded">
-                  <option value="">choose</option>
-                  <option value="shoes">Shoes</option>
-                  <option value="accessories">Accessories</option>
-                  <option value="clothes">Clothes</option>
-                </select>
-              </div>
             </div>
           </div>
           <div className="mt-4">
             <hr className="border-t border-gray-400" />
           </div>
-          <div className="mt-4 flex gap-4">
+          <div className="mt-4 flex flex-col sm:flex-row sm:justify-between sm:items-center">
             {/* Your category, size, color selectors */}
           </div>
           <div className="pt-8">

@@ -1,15 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const Content = () => {
   const [image1, setImage1] = useState(null);
   const [imagePreview1, setImagePreview1] = useState(null);
   const [text1, setText1] = useState("");
-
   const [image2, setImage2] = useState(null);
   const [imagePreview2, setImagePreview2] = useState(null);
   const [text2, setText2] = useState("");
   const [comment1, setComment1] = useState("");
   const [comment2, setComment2] = useState("");
+  const [bannerdata, setBannerdata] = useState([]);
 
   const handleImageChange1 = (e) => {
     const file = e.target.files[0];
@@ -47,9 +47,30 @@ const Content = () => {
     }
   };
 
+  const Herosection = async () => {
+    const response = await fetch(" http://localhost:4000/content");
+    if (!response.ok) {
+      console.log(error);
+    }
+    const result = await response.json();
+    const resultArray = Object.values(result); // Adjust based on your scenario
+    setBannerdata(resultArray);
+    // setBannerdata(result);
+  };
+
+  useEffect(()=>{
+    Herosection();
+  },[])
+  console.log("Banners",bannerdata)
+
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4 text-center mt-7">Banners</h2>
+      <h2 className="text-2xl font-bold mb-4 text-center mt-7">Hero Banners</h2>
+      <div className="flex justify-around mt-7">
+      <img src={bannerdata[2]} alt="banner1" className="w-96 h-auto"/>
+      <img src={bannerdata[5]} alt="banner1"  className="w-96 h-auto"/>
+      </div>
+      
       <div className="flex items-start justify-center mt-10 bg-white p-9 rounded-2xl gap-10">
         <div className="mb-4">
           <label

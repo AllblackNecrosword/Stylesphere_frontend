@@ -14,7 +14,8 @@ const Home = (props) => {
   const [isUpdateOpen, setIsUpdateOpen] = useState(false);
   const [isReadOpen, setIsReadOpen] = useState(false);
   const [selectedProductDetails, setSelectedProductDetails] = useState(null);
-  const [numorder, setNumorder]=useState(null);
+  const [numorder, setNumorder] = useState(null);
+  const [usernum, setUsernum] = useState(null);
 
   // Get all the product data from the database
   const getProductData = async () => {
@@ -28,7 +29,16 @@ const Home = (props) => {
       setData(result);
     }
   };
+  
+  const getTotalPrice = (products) => {
+    return products.reduce((total, product) => {
+      return total + parseFloat(product.price);
+    }, 0);
+  };
 
+  // Calculate total price
+  const totalPrice = getTotalPrice(data);
+  console.log("Total Price:", totalPrice);
   // Get all the total product number from the database
   const getTotalProducts = async () => {
     const response = await fetch(
@@ -44,13 +54,22 @@ const Home = (props) => {
     }
   };
 
-// Get all the total order number from the callback
+  const getuserNumber = async()=>{
+    const response = await fetch(" http://localhost:4000/api/totalusers");
+    if(!response.ok){
+      console.log(error);
+    }
+    const result = await response.json();
+    setUsernum(result)
+  }
 
+  // Get all the total order number from the callback
 
   useEffect(() => {
     getProductData();
     getTotalProducts();
-  }, []);
+    getuserNumber();
+  }, [usernum,data,numorder]);
 
   const handleReadClick = (product) => {
     setSelectedProductDetails(product);
@@ -138,7 +157,7 @@ const Home = (props) => {
           <h2 className="font-semibold text-2xl mt-4 p-2  text-white">
             Store value{" "}
           </h2>
-          <p className="text-white text-3xl p-2">20</p>
+          <p className="text-white text-3xl p-2">{totalPrice}</p>
         </div>
         {/* order card */}
         <div className="bg-gradient-to-r from-yellow-500 to-yellow-300 p-7 rounded-2xl flex flex-col justify-center items-center hover:shadow-lg">
@@ -152,7 +171,7 @@ const Home = (props) => {
         <div className="bg-gradient-to-r from-teal-500 to-teal-300 p-7 rounded-2xl flex flex-col justify-center items-center hover:shadow-lg">
           <MdGetApp size={55} color="white" />
           <h2 className="font-semibold text-2xl mt-4 p-2 text-white">Users</h2>
-          <p className="text-white text-3xl p-2">20</p>
+          <p className="text-white text-3xl p-2">{usernum}</p>
         </div>
       </div>
       <div className="mt-3">

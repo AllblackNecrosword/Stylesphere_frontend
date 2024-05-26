@@ -14,6 +14,10 @@ import Cancelorder from "./Pages/Cancelorder";
 // import Returnorder from "./Pages/Returnorder";
 import Returnorder from "./Pages/Returnorder";
 import Content from "./Pages/Content";
+import { MdOutlineCancel } from "react-icons/md";
+import { IoIosReturnRight } from "react-icons/io";
+import { FaRegUser } from "react-icons/fa";
+import { MdContentPaste } from "react-icons/md";
 
 const Dashboard = () => {
   const [activeMenu, setActiveMenu] = useState("dashboard");
@@ -87,7 +91,7 @@ const Dashboard = () => {
               } hover:bg-gray-700`}
             >
               <div className="flex items-center">
-                <MdOutlineFileDownload size={23} className="mr-2" /> Cancel
+                <MdOutlineCancel size={23} className="mr-2" /> Cancel
                 Orders
               </div>
             </Link>
@@ -100,7 +104,7 @@ const Dashboard = () => {
               } hover:bg-gray-700`}
             >
               <div className="flex items-center">
-                <MdOutlineFileDownload size={23} className="mr-2" /> Return
+                <IoIosReturnRight size={23} className="mr-2" /> Return
                 Orders
               </div>
             </Link>
@@ -113,7 +117,7 @@ const Dashboard = () => {
               } hover:bg-gray-700`}
             >
               <div className="flex items-center">
-                <MdOutlineFileDownload size={23} className="mr-2" /> Users
+                <FaRegUser size={20} className="mr-2" /> Users
               </div>
             </Link>
             {/* Content Management */}
@@ -125,7 +129,7 @@ const Dashboard = () => {
               } hover:bg-gray-700`}
             >
               <div className="flex items-center">
-                <MdOutlineFileDownload size={23} className="mr-2" /> Content
+                <MdContentPaste size={20} className="mr-2" /> Content
               </div>
             </Link>
           </div>

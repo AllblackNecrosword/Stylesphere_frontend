@@ -12,6 +12,7 @@ const Payment = () => {
     productIdentity: "1234567890",
     productName: "Style Sphere",
     productUrl: "http://gameofthrones.com/buy/Dragons",
+    amount:2000,
     eventHandler: {
       onSuccess(payload) {
         // hit merchant api for initiating verfication

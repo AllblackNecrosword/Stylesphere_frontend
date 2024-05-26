@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { HiEye, HiTrash } from "react-icons/hi";
 import ReadOrder from "../Components/ReadOrder";
+import Swal from "sweetalert2";
 
 const Cancelorder = () => {
   const [data, setData] = useState([]);
@@ -28,6 +29,25 @@ const Cancelorder = () => {
     setSelectedProductDetails(product);
     setIsReadOpen(true);
   };
+  
+  const confirmDelete=(item)=>{
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      // If user confirms the deletion
+      if (result.isConfirmed) {
+        // Call the deleteProduct function
+        // deleteProduct(productId);
+        handleDelete(item);
+      }
+    });
+  }
 
   const handleDelete = async (item) => {
     const orderid = item._id;
@@ -52,7 +72,7 @@ const Cancelorder = () => {
 
   return (
     <div className="m-9">
-      <h2 className="text-2xl font-semibold mb-4">Users</h2>
+      <h2 className="text-2xl font-semibold mb-4">Cancel Orders</h2>
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-50">
           <tr>
@@ -126,7 +146,7 @@ const Cancelorder = () => {
                 />
                 <button
                   className="bg-red-700 p-2 rounded-2xl text-white"
-                  onClick={() => handleDelete(item)}
+                  onClick={() => confirmDelete(item)}
                 >
                   Cancel
                 </button>

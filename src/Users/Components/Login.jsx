@@ -9,6 +9,8 @@ const Login = () => {
   const { setToken, setUser, setUserid, setAuth } = userAuth();
   const [input, setInput] = useState({});
   const navigate = useNavigate();
+  const [validationMessage, setValidationMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleinput = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
@@ -17,6 +19,21 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!input.email || !input.password) {
+      toast.error("All fields are required", {
+        position: "bottom-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      return;
+    }
+
     try {
       const response = await fetch("http://localhost:4000/api/login", {
         method: "POST",
@@ -25,10 +42,10 @@ const Login = () => {
         },
         body: JSON.stringify(input),
       });
+
       const data = await response.json();
-      // console.log(data); // Log the data received from the server
+
       if (response.ok) {
-        // Login successful
         toast.success("Login successful", {
           position: "top-right",
           autoClose: 5000,
@@ -39,31 +56,48 @@ const Login = () => {
           progress: undefined,
           theme: "light",
         });
-        console.log("The detail of the login is", data);
-        // console.log('mytoken',data.data.token);
+
         localStorage.setItem("token", JSON.stringify(data.data.token));
         setToken(data.data.token);
         localStorage.setItem("user", JSON.stringify(data.data.user.name));
         setUser(data.data.user.name);
         localStorage.setItem("_id", JSON.stringify(data.data.user._id));
         setUserid(data.data.user._id);
-        // Redirect based on isAdmin value
+
         if (data.data.user.isAdmin) {
-          localStorage.setItem("role",JSON.stringify("Admin"));
+          localStorage.setItem("role", JSON.stringify("Admin"));
           setAuth("Admin");
           navigate("/dashboard");
         } else {
           navigate("/");
         }
       } else {
-        // Login failed
-        alert("data.error");
-        console.error(data.error);
-        // Display error message to the user
+        // Handle specific errors from the server
+        setErrorMessage(data.message || "Login failed. Please try again.");
+        toast.error(data.message || "Login failed. Please try again.", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       }
     } catch (error) {
-      console.error("Internal server error");
-      console.error("Error occurred during login:", error);
+      console.error("Internal server error:", error);
+      setErrorMessage("Internal server error. Please try again later.");
+      toast.error("Internal server error. Please try again later.", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     }
   };
 
@@ -76,7 +110,11 @@ const Login = () => {
             Sign in to your account
           </h2>
         </div>
-
+        <div className="text-center mt-2">
+          {errorMessage && (
+            <div className="text-red-500 text-sm font-bold">{errorMessage}</div>
+          )}
+        </div>
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <form className="space-y-6" action="#" method="POST">
             <div>
@@ -107,11 +145,11 @@ const Login = () => {
                 >
                   Password
                 </label>
-                <div className="text-sm">
+                {/* <div className="text-sm">
                   <a href="#" className="font-semibold text-black ">
                     Forgot password?
                   </a>
-                </div>
+                </div> */}
               </div>
               <div className="mt-2">
                 <input
