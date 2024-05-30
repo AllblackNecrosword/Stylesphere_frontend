@@ -5,6 +5,8 @@ import config from "../../Khalti/Khalticonfig";
 import { HiTrash } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const CartItems = ({ props }) => {
   let checkout = new KhaltiCheckout(config);
@@ -105,7 +107,17 @@ const CartItems = ({ props }) => {
       if (response.ok) {
         // If deletion is successful, update the UI by fetching updated cart data
         const result = await response.json(); // Parse the response // Set data to the updated cart data array
-        alert("Deleted successfully");
+        // alert("Deleted successfully");
+        toast.success("Product Deleted Successfully", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       }
     } catch (error) {
       console.error(error);

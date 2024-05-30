@@ -9,10 +9,9 @@ import Signup from "./Users/Components/Signup";
 import Shopmen from "./Users/Pages/Shopmen";
 import Shopwomen from "./Users/Pages/Shopwomen";
 import Shopkids from "./Users/Pages/Shopkids";
-import Addtocart from "./Users/Pages/Addtocart";
+
 import Wishlist from "./Users/Pages/Wishlist";
-import Contact from "./Users/Pages/Contact";
-import Dashboard from "./Admin/Dashboard";
+
 import Productpage from "./Users/Pages/Productpage";
 import Userprovider from "./auth/userAuth";
 import ProtectedRoute from "./auth/ProtectedRoute";
@@ -21,6 +20,7 @@ import Profile from "./Users/Pages/Profile";
 import BotpressChatbot from "./BotpressChatbot";
 import Payment from "./Users/Pages/Payment";
 import ReturnOrder from "./Users/Pages/ReturnOrder";
+import NotFound from "./Users/Pages/NotFound";
 
 function App() {
   return (
@@ -28,7 +28,7 @@ function App() {
       <BrowserRouter>
         <AppContent />
       </BrowserRouter>
-      <BotpressChatbot/>
+      <BotpressChatbot />
     </Userprovider>
   );
 }
@@ -38,11 +38,7 @@ function AppContent() {
   const [cartdata, setCartdata] = useState([]);
   const [favoriteProducts, setFavoriteProducts] = useState([]);
 
-
-
-//Passing the data from cart to checkout 
-
-
+  //Passing the data from cart to checkout
 
   //handle add to whishlist
   const addToFavorites = (product) => {
@@ -66,9 +62,7 @@ function AppContent() {
   return (
     <>
       {/* Conditional rendering for Navbar */}
-      {shouldShowNavbarAndFooter() && (
-        <Navbar  />
-      )}
+      {shouldShowNavbarAndFooter() && <Navbar />}
       <Routes>
         <Route path="/" element={<Header />} />
         {/* <Route path="/cart" element={<Cart />} /> */}
@@ -85,10 +79,11 @@ function AppContent() {
         <Route path="/women" element={<Shopwomen />} />
         <Route path="/kids" element={<Shopkids />} />
         <Route path="/return" element={<ReturnOrder />} />
-        <Route path="/cart" element={<CartItems/>} />
+        <Route path="/cart" element={<CartItems />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/payment" element={<Payment />} />
-        
+        <Route path="/*" element={<NotFound />} />
+
         <Route
           path="/ProductDetail/:id"
           element={

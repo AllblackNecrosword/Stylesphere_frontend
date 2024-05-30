@@ -95,7 +95,7 @@ const Payment = () => {
           state: input.state,
           postalCode: input.postalcode,
         },
-        totalPrice: 240, // Assuming totalPrice is calculated elsewhere
+        totalPrice: totalAmount, // Assuming totalPrice is calculated elsewhere
         paymentMethod: "Khalti", // Assuming payment method is Khalti
         status: "Pending", // Assuming initial status is pending
         products: data, // Assuming data is an array of products fetched from backend

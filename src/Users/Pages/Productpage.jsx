@@ -6,6 +6,8 @@ import { TailSpin } from "react-loader-spinner";
 import { ThreeDots } from "react-loader-spinner";
 import { userAuth } from "../../auth/userAuth";
 import Swal from "sweetalert2";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Productpage = (props) => {
   const [product, setProduct] = useState({});
@@ -20,6 +22,7 @@ const Productpage = (props) => {
   const [reviewloading, setReviewLoading] = useState(false);
   const { id } = useParams();
   const { userid, user } = userAuth();
+  const [selectedSize, setSelectedSize] = useState(null);
 
   useEffect(() => {
     const fetchProductData = async () => {
@@ -144,6 +147,19 @@ const Productpage = (props) => {
 
   const addtocarthandler = async (product) => {
     try {
+      if (!selectedSize) {
+        toast.error("Please select a size", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        return;
+      }
       if (userid) {
         const response = await fetch("http://localhost:4000/doc/", {
           method: "POST",
@@ -153,18 +169,40 @@ const Productpage = (props) => {
           body: JSON.stringify({
             userId: userid,
             productId: product._id,
+            size: selectedSize,
           }),
         });
-
+  
         const responseData = await response.json();
-        if (response.status === 400) {
+  
+        if (response.status === 400 && responseData.message === "Product is out of stock") {
+          // If the product is out of stock, show a toast notification
+          toast.error("Product is out of stock", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        } else if (response.status === 400) {
           // If the product is already in the cart, show an error message
           console.log(responseData.error);
-          // You can display the error message to the user using a toast or alert
           alert(responseData.error);
         } else if (response.status === 201 || response.status === 200) {
           // If the product is successfully added to the cart, show success message
-          alert("Product added to cart successfully!");
+          toast.success("Product Added Successfully", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
         } else {
           // Handle other response statuses if needed
           console.log("Unexpected response:", responseData);
@@ -179,10 +217,10 @@ const Productpage = (props) => {
       }
     } catch (error) {
       console.error(error);
-      // Handle any unexpected errors
       alert("An error occurred while adding the product to the cart.");
     }
   };
+  
 
   const addtoFavhandler = async (product) => {
     try {
@@ -265,7 +303,7 @@ const Productpage = (props) => {
                 <p className="font-bold mt-3">
                   Product Category: {product.productType}
                 </p>
-                <div className="flex mt-3 items-center pb-5 border-b-2 border-gray-200 mb-5">
+                {/* <div className="flex mt-3 items-center pb-5 border-b-2 border-gray-200 mb-5">
                   {product.sizes && product.sizes.length > 0 && (
                     <div>
                       <p className="font-bold">Product Sizes</p>
@@ -283,7 +321,25 @@ const Productpage = (props) => {
                       </div>
                     </div>
                   )}
-                </div>
+                </div> */}
+                  <div className="flex mt-3 items-center pb-5 border-b-2 border-gray-200 mb-5">
+                {product.sizes && product.sizes.length > 0 && (
+                  <div>
+                    <p className="font-bold">Product Sizes</p>
+                    <div className="mt-4 flex flex-wrap">
+                      {product.sizes.map((size, index) => (
+                        <button
+                          key={index}
+                          className={`p-2 border rounded-lg m-2 hover:bg-slate-800 hover:text-white ${convertToClassName(size)} ${selectedSize === size ? 'bg-slate-800 text-white' : ''}`}
+                          onClick={() => setSelectedSize(size)}
+                        >
+                          {size}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
 
                 <button
                   className="flex justify-center items-center text-xl font-bold w-full text-white bg-zinc-950 border-0 py-4 px-8 focus:outline-none hover:bg-slate-700 rounded-2xl my-4"
